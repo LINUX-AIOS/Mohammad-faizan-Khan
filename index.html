@@ -1,175 +1,330 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Linux-AIOS | Digital Innovation by Faizan Khan</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Linux-AIOS — Faizan Khan</title>
+
+  <!-- Tailwind CDN (works fine for GitHub Pages) -->
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+
   <style>
-    /* Scroll animation */
-    .fade-in {
+    /* Animated gradient background */
+    :root{
+      --glass-bg: rgba(255,255,255,0.18);
+      --glass-border: rgba(255,255,255,0.25);
+      --glass-dark: rgba(10,12,16,0.35);
+    }
+    .animated-bg{
+      position: fixed;
+      inset: 0;
+      z-index: -10;
+      background: linear-gradient(120deg,#0f172a 0%, #0ea5e9 25%, #7c3aed 50%, #06b6d4 75%, #0f172a 100%);
+      background-size: 400% 400%;
+      animation: gradientMove 22s ease infinite;
+      filter: saturate(1.05) blur(18px);
+    }
+    @keyframes gradientMove {
+      0%{background-position:0% 50%}
+      50%{background-position:100% 50%}
+      100%{background-position:0% 50%}
+    }
+
+    /* Glass card */
+    .glass {
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      backdrop-filter: blur(10px) saturate(120%);
+      -webkit-backdrop-filter: blur(10px) saturate(120%);
+      box-shadow: 0 8px 30px rgba(2,6,23,0.35);
+    }
+    /* Dark theme overrides */
+    .dark .glass {
+      background: rgba(10,12,16,0.36);
+      border: 1px solid rgba(255,255,255,0.06);
+      box-shadow: 0 10px 40px rgba(2,6,23,0.6);
+    }
+
+    /* logo animation */
+    .logo-anim {
+      width: 92px;
+      height: 92px;
+      border-radius: 999px;
+      display:inline-block;
+      padding:6px;
+      transition: transform 0.6s cubic-bezier(.2,.9,.3,1), box-shadow .3s;
+      animation: slowSpin 12s linear infinite;
+      box-shadow: 0 6px 20px rgba(2,6,23,0.25), 0 0 18px rgba(99,102,241,0.12);
+    }
+    @keyframes slowSpin {
+      0% { transform: rotate(0deg) }
+      100% { transform: rotate(360deg) }
+    }
+
+    /* glow pulse */
+    .logo-anim::after{
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: 999px;
+      filter: blur(14px);
+      opacity: .38;
+      transition: opacity .4s;
+    }
+
+    /* fade-in scroll */
+    .fade {
       opacity: 0;
-      transform: translateY(20px);
-      transition: all 0.8s ease-in-out;
+      transform: translateY(18px);
+      transition: opacity .8s ease, transform .8s ease;
     }
-    .fade-in.visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
+    .fade.visible { opacity: 1; transform: translateY(0); }
+
+    /* responsive iframe container */
+    .iframe-wrap { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 12px; }
+    .iframe-wrap iframe { position: absolute; top:0; left:0; width:100%; height:100%; border:0; }
+
+    /* small utilities for glass inner padding on mobile */
+    .glass-pad { padding: 1.25rem; }
+    @media (min-width: 768px) { .glass-pad { padding: 2rem; } }
+
+    /* theme-transition for smooth color change */
+    body { transition: background-color .35s ease, color .35s ease; }
   </style>
 </head>
-<body class="bg-gray-50 text-gray-800 transition-colors duration-500">
+<body class="antialiased text-gray-900 bg-transparent dark:text-gray-100">
 
-  <!-- DARK MODE TOGGLE -->
+  <!-- Animated background -->
+  <div class="animated-bg" aria-hidden="true"></div>
+
+  <!-- Theme toggle -->
   <div class="fixed top-4 right-4 z-50">
-    <button id="themeToggle" class="bg-blue-800 text-white px-3 py-2 rounded-lg shadow hover:bg-blue-700 transition">
-      🌙 Dark Mode
+    <button id="themeToggle" class="glass px-3 py-2 rounded-lg shadow-sm font-medium flex items-center space-x-2">
+      <span id="themeIcon">🌙</span><span id="themeText">Dark</span>
     </button>
   </div>
 
-  <!-- HERO -->
-  <section class="text-center py-12 bg-gradient-to-r from-gray-800 to-blue-900 text-white fade-in">
-    <img src="images/logo.png" alt="Linux-AIOS Logo" class="mx-auto w-24 mb-4 rounded-full shadow-lg">
-    <h1 class="text-3xl font-bold tracking-wide">FAIZAN KHAN</h1>
-    <p class="text-lg mt-2">Project & Operations Manager | Founder of Linux-AIOS | Author of “Sand & Silence”</p>
-    <p class="mt-2">Lucknow 🇮🇳 | Saudi Arabia 🇸🇦 | 
-      <a href="mailto:mohammad.faizankhan@icloud.com" class="underline hover:text-gray-300">
-        mohammad.faizankhan@icloud.com
-      </a>
-    </p>
-  </section>
+  <!-- Page container -->
+  <main class="min-h-screen flex flex-col items-center py-12 px-4">
+    <!-- Center card -->
+    <header class="glass max-w-4xl w-full rounded-2xl glass-pad mb-8 fade" id="hero">
+      <div class="flex items-center space-x-4 md:space-x-6">
+        <!-- animated logo -->
+        <div class="relative">
+          <img src="images/logo.png" alt="Linux-AIOS logo" class="logo-anim object-cover" id="logoImg">
+        </div>
 
-  <!-- ABOUT -->
-  <section class="max-w-4xl mx-auto px-4 py-10 fade-in">
-    <h2 class="text-2xl font-bold mb-4 text-blue-800 dark:text-blue-400">About Faizan Khan</h2>
-    <p class="mb-4 leading-relaxed">
-      Faizan Khan is a results-oriented Project and Operations Manager with over nine years of experience
-      in workforce management, administration, and technology integration across India and Saudi Arabia.
-      He combines strategic planning with hands-on leadership to deliver excellence through his initiative, Linux-AIOS.
-    </p>
-    <img src="images/faizan.jpg" alt="Faizan Khan" class="w-48 rounded-2xl shadow-lg my-6">
-  </section>
-
-  <!-- LINUX-AIOS OVERVIEW -->
-  <section class="bg-white py-10 fade-in dark:bg-gray-800 dark:text-gray-200">
-    <div class="max-w-4xl mx-auto px-4">
-      <h2 class="text-2xl font-bold mb-4 text-blue-800 dark:text-blue-400">Linux-AIOS | All-In-One Digital Innovation</h2>
-      <p class="leading-relaxed">
-        Linux-AIOS is a digital ecosystem of intelligent web tools designed and developed by Faizan Khan.
-        The platform merges creativity with practical technology to deliver solutions for professionals and organizations worldwide.
-      </p>
-    </div>
-  </section>
-
-  <!-- TOOLS -->
-  <section class="bg-gray-100 py-10 dark:bg-gray-900 dark:text-gray-200 fade-in">
-    <div class="max-w-5xl mx-auto px-4">
-      <h2 class="text-2xl font-bold mb-8 text-blue-800 dark:text-blue-400 text-center">Our Tools & Projects</h2>
-      <div class="grid md:grid-cols-2 gap-6">
-        <div class="bg-white dark:bg-gray-800 shadow rounded-2xl p-6">
-          <h3 class="font-semibold text-lg mb-2">🗺️ Where Am I</h3>
-          <p>Real-time location and ZIP lookup tool.</p>
-          <a href="https://where.am.i.linux-aios.com" class="text-blue-600 underline">Visit Tool</a>
-        </div>
-        <div class="bg-white dark:bg-gray-800 shadow rounded-2xl p-6">
-          <h3 class="font-semibold text-lg mb-2">🏢 CarePro CRM</h3>
-          <p>Employee, project & accommodation management system.</p>
-          <a href="https://carepro-accommodation.vercel.app" class="text-blue-600 underline">Open App</a>
-        </div>
-        <div class="bg-white dark:bg-gray-800 shadow rounded-2xl p-6">
-          <h3 class="font-semibold text-lg mb-2">🧾 CV Generator</h3>
-          <p>Create standardized CVs for workforce teams.</p>
-          <a href="https://linux-aios.github.io/care-pro-cv-generator-by-faizan/" class="text-blue-600 underline">Launch Tool</a>
-        </div>
-        <div class="bg-white dark:bg-gray-800 shadow rounded-2xl p-6">
-          <h3 class="font-semibold text-lg mb-2">🌊 FreePool</h3>
-          <p>A public repository of open tools and resources.</p>
-          <a href="https://faizandgreate-lang.github.io/Free-pool/" class="text-blue-600 underline">Explore</a>
-        </div>
-        <div class="bg-white dark:bg-gray-800 shadow rounded-2xl p-6 md:col-span-2">
-          <h3 class="font-semibold text-lg mb-2">✍️ Blog</h3>
-          <p>Insights on technology, management, and personal reflections.</p>
-          <a href="https://www.linux-aios.com" class="text-blue-600 underline">Read Blog</a>
+        <div>
+          <h1 class="text-2xl md:text-3xl font-semibold tracking-tight">FAIZAN KHAN</h1>
+          <p class="text-sm md:text-base text-gray-700 dark:text-gray-300 mt-1">Project & Operations Manager • Founder, Linux-AIOS • Author</p>
+          <p class="text-xs md:text-sm mt-2 text-gray-600 dark:text-gray-400">
+            Lucknow, India · +966 5582807659 · <a href="mailto:mohammad.faizankhan@icloud.com" class="underline">mohammad.faizankhan@icloud.com</a>
+          </p>
+          <div class="mt-3 flex flex-wrap gap-2">
+            <a class="text-sm px-3 py-1 rounded-md glass" href="https://www.linux-aios.com" target="_blank">Blog</a>
+            <a class="text-sm px-3 py-1 rounded-md glass" href="https://www.linkedin.com/in/faizan-khan-504084229" target="_blank">LinkedIn</a>
+            <a class="text-sm px-3 py-1 rounded-md glass" href="https://faizandgreate-lang.github.io/Free-pool/" target="_blank">FreePool</a>
+          </div>
         </div>
       </div>
+    </header>
+
+    <!-- Two column layout: Left: About & Tools, Right: Quick stats / mini-cards -->
+    <div class="max-w-6xl w-full grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+      <!-- MAIN COLUMN -->
+      <section class="lg:col-span-2 space-y-6">
+
+        <!-- About (expanded from CV) -->
+        <article class="glass rounded-2xl glass-pad fade" id="about">
+          <h2 class="text-xl font-semibold mb-2">About & Professional Summary</h2>
+          <p class="text-sm leading-relaxed text-gray-800 dark:text-gray-200 mb-3">
+            Faizan Khan is a seasoned Project & Operations Manager with 9+ years of progressive experience across India and Saudi Arabia.
+            He has led large-scale manpower operations, facility services and multi-site projects — consistently delivering operational improvements,
+            workforce stability, and client satisfaction. Faizan combines technical foundations (IT systems, hardware, troubleshooting) with advanced
+            administrative leadership to design scalable processes and build resilient teams.
+          </p>
+
+          <h3 class="font-medium mt-4">Core Responsibilities (recent roles)</h3>
+          <ul class="list-disc ml-5 mt-2 text-sm leading-relaxed text-gray-700 dark:text-gray-300">
+            <li>Overseeing 40+ simultaneous projects and operations for 1000+ employees (hospitality, healthcare, and corporate clients).</li>
+            <li>Full-cycle recruitment, onboarding, payroll coordination, and settlement handling across multiple jurisdictions.</li>
+            <li>Transport & accommodation planning, vendor management and compliance monitoring.</li>
+            <li>Training design and delivery — upskilling workforce in communication, safety and SOP adherence (300+ trained).</li>
+            <li>Introduced SmartSheet-based centralized tracking for payroll and project KPIs, improving visibility & accountability.</li>
+          </ul>
+
+          <h3 class="font-medium mt-4">Leadership Philosophy</h3>
+          <p class="text-sm leading-relaxed text-gray-700 dark:text-gray-300">
+            Efficiency is driven by people who understand purpose. Faizan’s approach centers on clear communication, respectful accountability, and
+            incremental process improvements. He champions sustainable operations that consider both business outcomes and team welfare.
+          </p>
+        </article>
+
+        <!-- Tools & interactive mini-CRM preview -->
+        <article class="glass rounded-2xl glass-pad fade" id="tools">
+          <h2 class="text-xl font-semibold mb-3">Tools & Live Demos</h2>
+
+          <div class="grid md:grid-cols-2 gap-4">
+            <!-- Where Am I -->
+            <div class="glass rounded-lg p-4">
+              <h4 class="font-semibold">🗺️ Where Am I</h4>
+              <p class="text-sm text-gray-700 dark:text-gray-300 mt-1">Real-time location and postal code lookup tool — lightweight, privacy-minded, mobile-ready.</p>
+              <a class="inline-block mt-3 text-sm underline" href="https://where.am.i.linux-aios.com" target="_blank">Open tool</a>
+            </div>
+
+            <!-- CarePro CRM (iframe preview) -->
+            <div class="glass rounded-lg p-4">
+              <h4 class="font-semibold">🏢 CarePro CRM — Mini Preview</h4>
+              <p class="text-sm text-gray-700 dark:text-gray-300 mt-1">Responsive preview of your CRM. Click View to open full app in new tab.</p>
+              <div class="mt-3">
+                <div class="iframe-wrap glass" style="padding:8px;">
+                  <!-- iframe preview: uses your Vercel URL -->
+                  <iframe src="https://carepro-accommodation.vercel.app" title="CarePro CRM preview" sandbox="allow-scripts allow-same-origin allow-forms"></iframe>
+                </div>
+                <div class="mt-2 flex gap-2">
+                  <a class="text-sm px-3 py-1 rounded-md glass" href="https://carepro-accommodation.vercel.app" target="_blank">Open Full CRM</a>
+                </div>
+              </div>
+            </div>
+
+            <!-- CV generator -->
+            <div class="glass rounded-lg p-4">
+              <h4 class="font-semibold">🧾 Instant CV Generator</h4>
+              <p class="text-sm text-gray-700 dark:text-gray-300 mt-1">Generate standardized workforce CVs instantly — prefilled templates & downloadable result.</p>
+              <a class="inline-block mt-3 text-sm underline" href="https://linux-aios.github.io/care-pro-cv-generator-by-faizan/" target="_blank">Launch CV Generator</a>
+            </div>
+
+            <!-- FreePool link (no embed) -->
+            <div class="glass rounded-lg p-4">
+              <h4 class="font-semibold">🌊 FreePool (Resources)</h4>
+              <p class="text-sm text-gray-700 dark:text-gray-300 mt-1">Collection of scripts, templates and small utilities curated by Faizan.</p>
+              <a class="inline-block mt-3 text-sm underline" href="https://faizandgreate-lang.github.io/Free-pool/" target="_blank">Open FreePool</a>
+            </div>
+
+            <!-- Blog card -->
+            <div class="glass rounded-lg p-4 md:col-span-2">
+              <h4 class="font-semibold">✍️ Articles & Book</h4>
+              <p class="text-sm text-gray-700 dark:text-gray-300 mt-1">Read founder notes, technical posts and the book <em>Sand & Silence</em> on the blog.</p>
+              <div class="mt-3 flex gap-2">
+                <a class="glass px-3 py-1 rounded-md" href="https://www.linux-aios.com" target="_blank">Visit Blog</a>
+                <a class="glass px-3 py-1 rounded-md" href="#" target="_blank">Book / Downloads</a>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Achievements & Metrics (enriched content) -->
+        <article class="glass rounded-2xl glass-pad fade" id="achievements">
+          <h2 class="text-xl font-semibold mb-3">Achievements & Impact</h2>
+          <ul class="list-disc ml-5 space-y-2 text-sm text-gray-700 dark:text-gray-300">
+            <li>Managed 40+ projects and 1,000+ employees across Saudi Arabia (hospitality & healthcare verticals).</li>
+            <li>Designed SmartSheet-based workflows to consolidate payroll and project KPIs — improved reporting time by ~40%.</li>
+            <li>Built an internal recruitment pipeline reducing external hiring costs by ~30%.</li>
+            <li>Delivered training programs to 300+ employees on workplace ethics and communication, improving retention metrics.</li>
+            <li>Launched sustainability initiatives (tree-planting drives) tied to CSR objectives.</li>
+            <li>Author of <strong>Sand & Silence — A Migrant’s Truth Beneath the Golden Kingdom</strong>.</li>
+          </ul>
+        </article>
+
+      </section>
+
+      <!-- RIGHT / QUICK INFO COLUMN -->
+      <aside class="space-y-6">
+        <!-- Quick stats card -->
+        <div class="glass rounded-2xl glass-pad fade">
+          <h3 class="font-semibold text-lg">Snapshot</h3>
+          <div class="mt-3 grid grid-cols-2 gap-3">
+            <div class="text-center">
+              <div class="text-2xl font-bold">40+</div>
+              <div class="text-xs text-gray-600 dark:text-gray-300">Projects</div>
+            </div>
+            <div class="text-center">
+              <div class="text-2xl font-bold">1k+</div>
+              <div class="text-xs text-gray-600 dark:text-gray-300">Employees Managed</div>
+            </div>
+            <div class="text-center">
+              <div class="text-2xl font-bold">300+</div>
+              <div class="text-xs text-gray-600 dark:text-gray-300">Trained</div>
+            </div>
+            <div class="text-center">
+              <div class="text-2xl font-bold">9+</div>
+              <div class="text-xs text-gray-600 dark:text-gray-300">Years Experience</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Technical Competence -->
+        <div class="glass rounded-2xl glass-pad fade">
+          <h3 class="font-semibold">Technical Competence</h3>
+          <ul class="mt-3 text-sm text-gray-700 dark:text-gray-300 space-y-1">
+            <li>SmartSheet, Project Tracking & KPI Dashboards</li>
+            <li>MS Office, Excel (advanced), Google Workspace</li>
+            <li>ERP systems (implementation support)</li>
+            <li>Linux / macOS / Windows administration</li>
+            <li>System troubleshooting & software deployment</li>
+            <li>Data visualization, reporting & basic scripting</li>
+            <li>Social media & basic digital marketing</li>
+          </ul>
+        </div>
+
+        <!-- Languages & Misc -->
+        <div class="glass rounded-2xl glass-pad fade">
+          <h3 class="font-semibold">Languages</h3>
+          <p class="text-sm mt-2 text-gray-700 dark:text-gray-300">English (C1), Hindi (C2), Urdu (C1), Arabic (A1)</p>
+
+          <h3 class="font-semibold mt-4">Licenses</h3>
+          <p class="text-sm text-gray-700 dark:text-gray-300">Private Driving License – Saudi Arabia</p>
+        </div>
+      </aside>
     </div>
-  </section>
 
-  <!-- VISION & VALUES -->
-  <section class="max-w-4xl mx-auto px-4 py-10 bg-white dark:bg-gray-800 dark:text-gray-200 fade-in">
-    <h2 class="text-2xl font-bold mb-4 text-blue-800 dark:text-blue-400">🎯 Vision & Values</h2>
-    <blockquote class="italic border-l-4 border-blue-800 pl-4 text-gray-700 dark:text-gray-300 mb-6">
-      “Efficiency is not achieved through systems alone, but through people who believe in the purpose behind their work.”
-    </blockquote>
-    <p class="leading-relaxed mb-6">
-      Faizan believes that successful organizations thrive where technology meets empathy.
-      His mission is to empower teams, integrate sustainable processes, and build long-term partnerships
-      that contribute to both corporate and community growth.
-    </p>
-    <ul class="list-disc ml-6 space-y-2">
-      <li>Empower human potential through technology.</li>
-      <li>Promote sustainable innovation and ethical leadership.</li>
-      <li>Foster collaboration, transparency, and continuous learning.</li>
-    </ul>
-  </section>
+    <!-- contact / footer -->
+    <footer class="max-w-4xl w-full mt-10 glass rounded-2xl glass-pad text-sm text-center fade">
+      <p class="text-sm">Connect: <a href="mailto:mohammad.faizankhan@icloud.com" class="underline">mohammad.faizankhan@icloud.com</a> · +966 5582807659</p>
+      <p class="text-xs text-gray-600 dark:text-gray-400 mt-2">© 2025 Linux-AIOS · Built & maintained by Faizan Khan</p>
+    </footer>
+  </main>
 
-  <!-- TECHNICAL COMPETENCE -->
-  <section class="bg-gray-100 dark:bg-gray-900 dark:text-gray-200 py-10 fade-in">
-    <div class="max-w-5xl mx-auto px-4">
-      <h2 class="text-2xl font-bold mb-6 text-blue-800 dark:text-blue-400 text-center">💡 Technical Competence</h2>
-      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 text-center">
-        <div class="bg-white dark:bg-gray-800 shadow rounded-xl p-6">SmartSheet</div>
-        <div class="bg-white dark:bg-gray-800 shadow rounded-xl p-6">MS Office Suite</div>
-        <div class="bg-white dark:bg-gray-800 shadow rounded-xl p-6">ERP Systems</div>
-        <div class="bg-white dark:bg-gray-800 shadow rounded-xl p-6">Linux / macOS / Windows</div>
-        <div class="bg-white dark:bg-gray-800 shadow rounded-xl p-6">System Troubleshooting</div>
-        <div class="bg-white dark:bg-gray-800 shadow rounded-xl p-6">Google Workspace</div>
-        <div class="bg-white dark:bg-gray-800 shadow rounded-xl p-6">Social Media Management</div>
-        <div class="bg-white dark:bg-gray-800 shadow rounded-xl p-6">Project Management Tools</div>
-        <div class="bg-white dark:bg-gray-800 shadow rounded-xl p-6">Data Visualization & Reporting</div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ACHIEVEMENTS -->
-  <section class="max-w-4xl mx-auto px-4 py-10 fade-in">
-    <h2 class="text-2xl font-bold mb-4 text-blue-800 dark:text-blue-400">Achievements</h2>
-    <ul class="list-disc ml-5 space-y-2">
-      <li>Digitized project tracking and resource management via SmartSheet.</li>
-      <li>Trained 300+ employees in ethics and communication.</li>
-      <li>Launched sustainability initiatives and tree-planting drives.</li>
-      <li>Author of “Sand & Silence – A Migrant’s Truth Beneath the Golden Kingdom.”</li>
-    </ul>
-  </section>
-
-  <!-- CONTACT -->
-  <footer class="bg-blue-900 text-white py-10 text-center fade-in">
-    <h2 class="text-xl font-bold mb-2">Connect with Faizan Khan</h2>
-    <p class="mb-2">📧 mohammad.faizankhan@icloud.com | ☎️ +966 5582807659</p>
-    <p class="mb-4"><a href="https://www.linkedin.com/in/faizan-khan-504084229" class="underline hover:text-gray-300">LinkedIn Profile</a></p>
-    <p class="text-sm text-gray-200">© 2025 Linux-AIOS. All rights reserved.</p>
-  </footer>
-
-  <!-- SCRIPT: DARK MODE + SCROLL ANIMATION -->
+  <!-- Scripts: theme, scroll animations (persisted theme) -->
   <script>
-    const toggleBtn = document.getElementById('themeToggle');
-    toggleBtn.addEventListener('click', () => {
-      document.body.classList.toggle('dark');
-      if (document.body.classList.contains('dark')) {
-        toggleBtn.textContent = '☀️ Light Mode';
+    // Theme handling with localStorage
+    const root = document.documentElement;
+    const body = document.body;
+    const btn = document.getElementById('themeToggle');
+    const icon = document.getElementById('themeIcon');
+    const ttext = document.getElementById('themeText');
+
+    function setTheme(isDark){
+      if(isDark){
+        body.classList.add('dark');
+        icon.textContent = '☀️';
+        ttext.textContent = 'Light';
+        localStorage.setItem('linuxAiOSTheme','dark');
       } else {
-        toggleBtn.textContent = '🌙 Dark Mode';
+        body.classList.remove('dark');
+        icon.textContent = '🌙';
+        ttext.textContent = 'Dark';
+        localStorage.setItem('linuxAiOSTheme','light');
       }
+    }
+    // initialize
+    const saved = localStorage.getItem('linuxAiOSTheme');
+    if(saved === 'dark') setTheme(true);
+    else setTheme(false);
+
+    btn.addEventListener('click', () => {
+      setTheme(!body.classList.contains('dark'));
     });
 
-    // Scroll animations
-    const elements = document.querySelectorAll('.fade-in');
-    const observer = new IntersectionObserver(entries => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) entry.target.classList.add('visible');
+    // Fade-in on scroll using IntersectionObserver
+    const fades = document.querySelectorAll('.fade');
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(ent => {
+        if(ent.isIntersecting) ent.target.classList.add('visible');
       });
-    });
-    elements.forEach(el => observer.observe(el));
+    }, {threshold: 0.12});
+    fades.forEach(el => io.observe(el));
   </script>
 
 </body>
