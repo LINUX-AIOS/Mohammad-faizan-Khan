@@ -9,216 +9,382 @@
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 
   <style>
-    /* Animated gradient background */
+    /* ---- Background: cloud-like animated gradient ---- */
     :root {
-      --glass-bg: rgba(255, 255, 255, 0.2);
-      --glass-border: rgba(255, 255, 255, 0.35);
+      --glass-bg: rgba(255,255,255,0.18);
+      --glass-border: rgba(255,255,255,0.30);
+      --glass-dark: rgba(10,12,16,0.36);
     }
-
     .animated-bg {
       position: fixed;
       inset: 0;
-      z-index: -10;
-      background: linear-gradient(120deg, #e0f2fe, #bae6fd, #93c5fd, #a5b4fc, #e0f2fe);
-      background-size: 400% 400%;
-      animation: gradientFlow 25s ease infinite;
-      filter: blur(16px) brightness(1.1);
+      z-index: -20;
+      background: linear-gradient(180deg, #f8fdff 0%, #e6f7ff 30%, #dff3ff 50%, #eef6ff 70%, #fbfeff 100%);
+      background-size: 300% 300%;
+      animation: cloudFlow 30s ease infinite;
+      filter: blur(18px) brightness(1.05);
+    }
+    @keyframes cloudFlow {
+      0% { background-position: 0% 40% }
+      50% { background-position: 100% 60% }
+      100% { background-position: 0% 40% }
     }
 
-    @keyframes gradientFlow {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
-    }
-
-    /* Glass look */
+    /* ---- Glass panels (rounded) ---- */
     .glass {
       background: var(--glass-bg);
       border: 1px solid var(--glass-border);
-      backdrop-filter: blur(12px) saturate(130%);
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
-      transition: all 0.3s ease;
+      border-radius: 14px;
+      backdrop-filter: blur(12px) saturate(120%);
+      -webkit-backdrop-filter: blur(12px) saturate(120%);
+      box-shadow: 0 8px 30px rgba(2,6,23,0.08);
+      transition: transform .25s ease, box-shadow .25s ease;
     }
-
-    .glass:hover {
-      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.2);
-    }
-
+    .glass:hover { transform: translateY(-6px); box-shadow: 0 18px 40px rgba(2,6,23,0.12); }
     .dark .glass {
-      background: rgba(15, 23, 42, 0.4);
-      border-color: rgba(255, 255, 255, 0.1);
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+      background: rgba(10,12,20,0.45);
+      border: 1px solid rgba(255,255,255,0.06);
+      box-shadow: 0 12px 36px rgba(0,0,0,0.45);
     }
 
-    /* Animated logo */
-    .logo-anim {
-      width: 90px;
-      height: 90px;
-      border-radius: 50%;
-      animation: slowSpin 14s linear infinite;
-      box-shadow: 0 6px 18px rgba(59, 130, 246, 0.4);
-    }
-    @keyframes slowSpin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
-
-    /* Parallax banner */
-    .banner {
-      position: relative;
+    /* ---- Breathing logo ---- */
+    .logo-breathe {
+      width: 110px;
+      height: 110px;
+      border-radius: 999px;
+      display: inline-block;
       overflow: hidden;
-      border-radius: 1rem;
-      height: 260px;
-      background: rgba(255,255,255,0.12);
+      padding: 6px;
+      position: relative;
+      box-shadow: 0 8px 26px rgba(59,130,246,0.12);
+      animation: breathe 4.5s ease-in-out infinite;
+    }
+    .logo-breathe img { width: 100%; height: 100%; object-fit: cover; border-radius: 999px; display:block; }
+    @keyframes breathe {
+      0% { transform: scale(1); box-shadow: 0 8px 26px rgba(59,130,246,0.10); }
+      50% { transform: scale(1.06); box-shadow: 0 18px 44px rgba(59,130,246,0.20); }
+      100% { transform: scale(1); box-shadow: 0 8px 26px rgba(59,130,246,0.10); }
+    }
+    .logo-glow {
+      position: absolute; inset: -8px; border-radius: 999px; pointer-events:none;
+      box-shadow: 0 0 48px rgba(99,102,241,0.08);
+      mix-blend-mode: screen;
     }
 
+    /* ---- Banner / parallax ---- */
+    .banner {
+      height: 300px;
+      border-radius: 14px;
+      overflow: hidden;
+      position: relative;
+    }
     .banner img {
-      width: 100%;
-      height: 100%;
+      width: 110%;
+      height: 110%;
       object-fit: cover;
-      transform: scale(1.08);
-      transition: transform 1s ease;
+      transform: translateY(0) scale(1.05);
+      transition: transform 0.6s ease;
     }
 
-    .banner:hover img {
-      transform: scale(1.1);
-    }
-
-    /* Fade scroll animation */
+    /* ---- Fade-in scroll ---- */
     .fade {
       opacity: 0;
-      transform: translateY(18px);
-      transition: all 0.8s ease;
+      transform: translateY(14px);
+      transition: opacity .7s ease, transform .7s ease;
     }
-    .fade.visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
+    .fade.visible { opacity: 1; transform: translateY(0); }
 
-    .iframe-wrap {
-      position: relative;
-      padding-bottom: 56.25%;
-      height: 0;
-      overflow: hidden;
-      border-radius: 10px;
-    }
-    .iframe-wrap iframe {
-      position: absolute;
-      top: 0; left: 0;
-      width: 100%;
-      height: 100%;
-      border: 0;
-    }
+    /* ---- Iframe responsive ---- */
+    .iframe-wrap { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 10px; }
+    .iframe-wrap iframe { position: absolute; top:0; left:0; width:100%; height:100%; border:0; }
 
-    body { transition: background-color .4s, color .4s; }
+    /* ---- Gallery ---- */
+    .gallery-card { border-radius: 10px; overflow: hidden; }
+    .gallery-card img { width:100%; height:100%; object-fit: cover; display:block; transition: transform .45s ease; }
+    .gallery-card:hover img { transform: scale(1.06); }
+
+    /* ---- Utilities ---- */
+    .glass-pad { padding: 1.25rem; }
+    @media (min-width:768px) { .glass-pad { padding: 1.75rem; } }
+    body { transition: background-color .35s ease, color .35s ease; }
   </style>
 </head>
-
 <body class="antialiased bg-transparent text-gray-900 dark:text-gray-100">
   <div class="animated-bg" aria-hidden="true"></div>
 
   <!-- Theme toggle -->
   <div class="fixed top-4 right-4 z-50">
-    <button id="themeToggle" class="glass px-3 py-2 rounded-lg shadow-sm font-medium flex items-center space-x-2">
-      <span id="themeIcon">🌙</span><span id="themeText">Dark</span>
+    <button id="themeToggle" class="glass px-3 py-2 rounded-lg shadow-sm flex items-center gap-2">
+      <span id="themeIcon">🌙</span><span id="themeText" class="text-sm">Dark</span>
     </button>
   </div>
 
-  <!-- Main -->
-  <main class="min-h-screen flex flex-col items-center py-12 px-4 space-y-10">
-    <!-- Header -->
-    <header class="glass max-w-4xl w-full rounded-2xl p-6 fade" id="hero">
-      <div class="flex items-center space-x-6">
-        <img src="images/profile.jpg" alt="Faizan Khan" class="logo-anim">
-        <div>
-          <h1 class="text-3xl font-semibold tracking-tight">FAIZAN KHAN</h1>
-          <p class="text-sm md:text-base text-gray-700 dark:text-gray-300 mt-1">
-            Project & Operations Manager • Founder, Linux-AIOS • Author
+  <main class="min-h-screen flex flex-col items-center py-12 px-4 space-y-8">
+
+    <!-- HEADER / HERO -->
+    <header class="glass max-w-4xl w-full rounded-2xl glass-pad fade" id="hero">
+      <div class="flex items-center gap-6">
+        <div class="logo-breathe">
+          <img src="images/logo.png" alt="Linux-AIOS logo" id="logoImg">
+          <div class="logo-glow"></div>
+        </div>
+
+        <div class="flex-1">
+          <h1 class="text-2xl md:text-3xl font-semibold leading-tight">FAIZAN KHAN</h1>
+          <p class="text-sm text-gray-700 dark:text-gray-300 mt-1">
+            Project & Operations Manager | Strategic Admin Leader | Workforce & Facility Expert
           </p>
-          <p class="text-xs mt-2 text-gray-600 dark:text-gray-400">
-            Lucknow, India · +966 5582807659 · 
-            <a href="mailto:mohammad.faizankhan@icloud.com" class="underline">mohammad.faizankhan@icloud.com</a>
+          <p class="text-xs text-gray-600 dark:text-gray-400 mt-2">
+            Lucknow, India – 226003 | +966 5582807659 | <a href="mailto:mohammad.faizankhan@icloud.com" class="underline">mohammad.faizankhan@icloud.com</a>
           </p>
+          <p class="text-xs text-gray-600 dark:text-gray-400 mt-2">
+            LinkedIn: <a href="https://www.linkedin.com/in/faizan-khan-504084229" target="_blank" class="underline">faizan-khan-504084229</a>
+            · Website: <a href="https://www.linux-aios.com" target="_blank" class="underline">linux-aios.com</a>
+          </p>
+
           <div class="mt-3 flex flex-wrap gap-2">
-            <a href="https://www.linux-aios.com" target="_blank" class="glass px-3 py-1 rounded-md text-sm">Blog</a>
-            <a href="https://www.linkedin.com/in/faizan-khan-504084229" target="_blank" class="glass px-3 py-1 rounded-md text-sm">LinkedIn</a>
-            <a href="https://faizandgreate-lang.github.io/Free-pool/" target="_blank" class="glass px-3 py-1 rounded-md text-sm">FreePool</a>
+            <a class="glass px-3 py-1 rounded-md text-sm" href="https://www.linux-aios.com" target="_blank">Blog</a>
+            <a class="glass px-3 py-1 rounded-md text-sm" href="https://www.linkedin.com/in/faizan-khan-504084229" target="_blank">LinkedIn</a>
+            <a class="glass px-3 py-1 rounded-md text-sm" href="https://faizandgreate-lang.github.io/Free-pool/" target="_blank">FreePool</a>
           </div>
         </div>
       </div>
     </header>
 
-    <!-- Parallax Banner -->
-    <section class="max-w-5xl w-full banner glass fade">
-      <img src="images/banner-placeholder.jpg" alt="Faizan Khan Banner">
+    <!-- Banner (parallax) -->
+    <section class="max-w-5xl w-full fade">
+      <div class="banner glass" id="banner">
+        <!-- Replace images/banner.jpg later -->
+        <img src="images/banner.jpg" alt="Banner — Faizan Khan" id="bannerImg">
+      </div>
     </section>
 
-    <!-- About -->
-    <section class="glass max-w-5xl w-full rounded-2xl p-6 fade">
-      <h2 class="text-2xl font-semibold mb-3">About Me</h2>
-      <p class="text-sm text-gray-800 dark:text-gray-200 leading-relaxed">
-        I’m a Project & Operations Manager with 9+ years of experience driving performance across large-scale operations in India and Saudi Arabia. 
-        Passionate about building efficient systems, training motivated teams, and creating digital tools that simplify work and amplify results.
-      </p>
-    </section>
+    <!-- CONTENT WRAPPER -->
+    <div class="max-w-6xl w-full grid grid-cols-1 lg:grid-cols-3 gap-6">
 
-    <!-- Tools & Projects -->
-    <section class="glass max-w-5xl w-full rounded-2xl p-6 fade">
-      <h2 class="text-2xl font-semibold mb-3">Live Tools & Projects</h2>
-      <div class="grid md:grid-cols-2 gap-4">
-        <div class="glass p-4 rounded-lg">
-          <h3 class="font-semibold">🗺️ Where Am I</h3>
-          <p class="text-sm">Real-time location & zip code finder.</p>
-          <a href="https://where.am.i.linux-aios.com" target="_blank" class="underline text-sm mt-2 inline-block">Open Tool</a>
+      <!-- LEFT: MAIN (two-column style) -->
+      <div class="lg:col-span-2 space-y-6">
+
+        <!-- PROFESSIONAL SUMMARY -->
+        <section class="glass rounded-2xl glass-pad fade" id="summary">
+          <h2 class="text-xl font-semibold mb-2">PROFESSIONAL SUMMARY</h2>
+          <p class="text-sm leading-relaxed text-gray-800 dark:text-gray-200">
+            Seasoned and results-oriented Project & Operations Manager with 9+ years of progressive experience managing large-scale manpower operations, administrative systems, and client-focused service delivery in both India and Saudi Arabia. Adept in multi-site team management, process improvement, and regulatory compliance, with a consistent track record of optimizing workforce performance, reducing operational inefficiencies, and maintaining high satisfaction levels for both clients and employees.
+          </p>
+          <p class="text-sm leading-relaxed text-gray-800 dark:text-gray-200 mt-3">
+            Recognized for strategic thinking, problem-solving, and people-centric leadership. Proven ability to align administrative functions with organizational goals while navigating complex multicultural environments.
+          </p>
+        </section>
+
+        <!-- CORE COMPETENCIES -->
+        <section class="glass rounded-2xl glass-pad fade" id="competencies">
+          <h2 class="text-xl font-semibold mb-3">CORE COMPETENCIES</h2>
+          <div class="grid sm:grid-cols-2 gap-2 text-sm text-gray-700 dark:text-gray-300">
+            <ul class="list-disc ml-5 space-y-1">
+              <li>Workforce & Project Management</li>
+              <li>HR & Employee Relations</li>
+              <li>Facility & Accommodation Planning</li>
+              <li>Transportation Logistics</li>
+              <li>Strategic Planning & Execution</li>
+              <li>Payroll & Compliance Oversight</li>
+            </ul>
+            <ul class="list-disc ml-5 space-y-1">
+              <li>Talent Acquisition & Onboarding</li>
+              <li>Training & Development Programs</li>
+              <li>Client Engagement & Retention</li>
+              <li>KPI Monitoring & Reporting</li>
+              <li>SmartSheet & Systems Integration</li>
+              <li>Conflict Resolution & Crisis Management</li>
+            </ul>
+          </div>
+        </section>
+
+        <!-- EXPERIENCE (timeline style) -->
+        <section class="glass rounded-2xl glass-pad fade" id="experience">
+          <h2 class="text-xl font-semibold mb-3">EXPERIENCE</h2>
+
+          <div class="space-y-4 text-sm text-gray-800 dark:text-gray-200">
+            <div>
+              <h3 class="font-semibold">Project Manager — Care-Pro, Saudi Arabia <span class="text-xs text-gray-500">| Oct 2023 – Present</span></h3>
+              <ul class="list-disc ml-5 mt-2">
+                <li>Overseeing 40+ concurrent projects with 1000+ employees across hospitality and healthcare sectors.</li>
+                <li>Managing cross-cultural teams from 7+ nationalities with full project lifecycle oversight.</li>
+                <li>Improved payroll and service tracking through centralized SmartSheet-based system.</li>
+                <li>Provided dispute resolution, recruitment, onboarding, training, and client support.</li>
+                <li>Strengthened client relationships through regular business visits and reporting.</li>
+              </ul>
+            </div>
+
+            <div>
+              <h3 class="font-semibold">Admin Officer — Care-Pro, Saudi Arabia <span class="text-xs text-gray-500">| Oct 2020 – Oct 2022</span></h3>
+              <ul class="list-disc ml-5 mt-2">
+                <li>Supported admin tasks across 30+ projects and over 1000 employees.</li>
+                <li>Managed HR coordination, logistics, and documentation.</li>
+                <li>Contributed to post-COVID operational continuity and remote systems setup.</li>
+              </ul>
+            </div>
+
+            <div>
+              <h3 class="font-semibold">Admin Assistant — Kawader-Pro, Saudi Arabia <span class="text-xs text-gray-500">| Feb 2019 – Oct 2020</span></h3>
+              <ul class="list-disc ml-5 mt-2">
+                <li>Handled administration of 40+ projects with 1000+ workforce.</li>
+                <li>Streamlined HR and logistical operations to ensure compliance and efficiency.</li>
+              </ul>
+            </div>
+
+            <div>
+              <h3 class="font-semibold">Computer Operator — Alwin Enterprises, Lucknow, India <span class="text-xs text-gray-500">| May 2016 – Apr 2018</span></h3>
+              <ul class="list-disc ml-5 mt-2">
+                <li>Maintained IT systems and supported digital migration of paper-based operations.</li>
+              </ul>
+            </div>
+
+            <div>
+              <h3 class="font-semibold">Computer Hardware Technician — J.P.S Enterprises, Lucknow, India <span class="text-xs text-gray-500">| Apr 2014 – Apr 2016</span></h3>
+              <ul class="list-disc ml-5 mt-2">
+                <li>Provided technical support for end-user workstations and network hardware.</li>
+              </ul>
+            </div>
+
+            <div>
+              <h3 class="font-semibold">Software Installer — Ayad Services, India <span class="text-xs text-gray-500">| Jan 2013 – Jun 2014</span></h3>
+              <ul class="list-disc ml-5 mt-2">
+                <li>Installed and maintained computer software for clients and businesses.</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <!-- EDUCATION & ACHIEVEMENTS -->
+        <div class="grid md:grid-cols-2 gap-4">
+          <section class="glass rounded-2xl glass-pad fade" id="education">
+            <h2 class="text-xl font-semibold mb-2">EDUCATION</h2>
+            <p class="text-sm text-gray-800 dark:text-gray-200">
+              <strong>Bachelor of Arts – Commerce</strong><br>
+              Amiruddaula Islamia Degree College, Lucknow | 2014
+            </p>
+          </section>
+
+          <section class="glass rounded-2xl glass-pad fade" id="achievements">
+            <h2 class="text-xl font-semibold mb-2">NOTABLE ACHIEVEMENTS</h2>
+            <ul class="list-disc ml-5 text-sm text-gray-800 dark:text-gray-200 space-y-1">
+              <li>Author of "Sand & Silence – A Migrant’s Truth Beneath the Golden Kingdom".</li>
+              <li>Digitized project tracking operations improving visibility and accountability.</li>
+              <li>Initiated tree-planting campaigns aligned with company CSR.</li>
+              <li>Trained 300+ employees on workplace ethics and communication.</li>
+              <li>Built internal recruitment process reducing external hiring costs by 30%.</li>
+            </ul>
+          </section>
         </div>
 
-        <div class="glass p-4 rounded-lg">
-          <h3 class="font-semibold">🏢 Mini CRM</h3>
-          <p class="text-sm">Preview of CarePro CRM.</p>
-          <div class="iframe-wrap mt-2">
-            <iframe src="https://carepro-accommodation.vercel.app"></iframe>
+        <!-- TECHNICAL SKILLS + LANGUAGES -->
+        <section class="glass rounded-2xl glass-pad fade" id="skills">
+          <h2 class="text-xl font-semibold mb-3">TECHNICAL SKILLS & LANGUAGES</h2>
+          <div class="flex flex-wrap gap-2 mb-3">
+            <span class="glass px-3 py-1 rounded-full text-sm">SmartSheet</span>
+            <span class="glass px-3 py-1 rounded-full text-sm">MS Excel / Office</span>
+            <span class="glass px-3 py-1 rounded-full text-sm">ERP Systems</span>
+            <span class="glass px-3 py-1 rounded-full text-sm">Linux / macOS / Windows</span>
+            <span class="glass px-3 py-1 rounded-full text-sm">System Troubleshooting</span>
+            <span class="glass px-3 py-1 rounded-full text-sm">Data Visualization</span>
+            <span class="glass px-3 py-1 rounded-full text-sm">Social Media Management</span>
+          </div>
+
+          <div class="grid sm:grid-cols-2 gap-4 text-sm text-gray-800 dark:text-gray-200">
+            <div>
+              <h4 class="font-semibold">Languages</h4>
+              <ul class="list-disc ml-5 mt-2">
+                <li>English – C1 (Advanced)</li>
+                <li>Hindi – C2 (Native)</li>
+                <li>Urdu – C1 (Advanced)</li>
+                <li>Arabic – A1 (Basic Working Knowledge)</li>
+              </ul>
+            </div>
+            <div>
+              <h4 class="font-semibold">Licenses & Interests</h4>
+              <p class="mt-2 text-sm">
+                Private Driving License – Saudi Arabia (Valid)
+                <br><strong>Hobbies:</strong> Writing poetry and blogs, exploring AI & OS, traveling, mentoring youth.
+              </p>
+            </div>
+          </div>
+        </section>
+
+      </div>
+
+      <!-- RIGHT: QUICK SNAPSHOT & CTA -->
+      <aside class="space-y-6">
+        <div class="glass rounded-2xl glass-pad fade">
+          <h3 class="font-semibold">Snapshot</h3>
+          <div class="mt-3 grid grid-cols-2 gap-3 text-center">
+            <div>
+              <div class="text-2xl font-bold">40+</div>
+              <div class="text-xs text-gray-600 dark:text-gray-300">Projects</div>
+            </div>
+            <div>
+              <div class="text-2xl font-bold">1k+</div>
+              <div class="text-xs text-gray-600 dark:text-gray-300">Employees Managed</div>
+            </div>
+            <div>
+              <div class="text-2xl font-bold">300+</div>
+              <div class="text-xs text-gray-600 dark:text-gray-300">Trained</div>
+            </div>
+            <div>
+              <div class="text-2xl font-bold">9+</div>
+              <div class="text-xs text-gray-600 dark:text-gray-300">Years</div>
+            </div>
+          </div>
+          <div class="mt-4">
+            <a class="glass block text-center px-3 py-2 rounded-md" href="mailto:mohammad.faizankhan@icloud.com">Contact Me</a>
+            <a class="glass block text-center px-3 py-2 rounded-md mt-2" href="https://linux-aios.github.io/care-pro-cv-generator-by-faizan/" target="_blank">Instant CV Generator</a>
           </div>
         </div>
 
-        <div class="glass p-4 rounded-lg">
-          <h3 class="font-semibold">🧾 CV Generator</h3>
-          <p class="text-sm">Instant CV builder for workforce profiles.</p>
-          <a href="https://linux-aios.github.io/care-pro-cv-generator-by-faizan/" target="_blank" class="underline text-sm mt-2 inline-block">Launch</a>
+        <div class="glass rounded-2xl glass-pad fade">
+          <h3 class="font-semibold">Live Tools</h3>
+          <ul class="mt-3 text-sm space-y-1">
+            <li><a href="https://where.am.i.linux-aios.com" class="underline" target="_blank">Where Am I</a></li>
+            <li><a href="https://carepro-accommodation.vercel.app" class="underline" target="_blank">CarePro CRM</a></li>
+            <li><a href="https://faizandgreate-lang.github.io/Free-pool/" class="underline" target="_blank">FreePool</a></li>
+            <li><a href="https://www.linux-aios.com" class="underline" target="_blank">Blog</a></li>
+          </ul>
         </div>
-
-        <div class="glass p-4 rounded-lg">
-          <h3 class="font-semibold">🌊 FreePool</h3>
-          <p class="text-sm">Curated open resources and scripts.</p>
-          <a href="https://faizandgreate-lang.github.io/Free-pool/" target="_blank" class="underline text-sm mt-2 inline-block">Open</a>
-        </div>
-      </div>
-    </section>
+      </aside>
+    </div>
 
     <!-- Photo Gallery -->
-    <section class="glass max-w-5xl w-full rounded-2xl p-6 fade">
-      <h2 class="text-2xl font-semibold mb-3">Photo Gallery</h2>
+    <section class="glass max-w-6xl w-full rounded-2xl glass-pad fade" id="gallery">
+      <h2 class="text-xl font-semibold mb-4">Photo Gallery</h2>
       <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
-        <div class="rounded-lg overflow-hidden bg-gray-300 animate-pulse h-40"></div>
-        <div class="rounded-lg overflow-hidden bg-gray-300 animate-pulse h-40"></div>
-        <div class="rounded-lg overflow-hidden bg-gray-300 animate-pulse h-40"></div>
-        <div class="rounded-lg overflow-hidden bg-gray-300 animate-pulse h-40"></div>
-        <div class="rounded-lg overflow-hidden bg-gray-300 animate-pulse h-40"></div>
-        <div class="rounded-lg overflow-hidden bg-gray-300 animate-pulse h-40"></div>
+        <!-- placeholders — replace with images/gallery/1.jpg .. 6.jpg -->
+        <div class="gallery-card glass overflow-hidden h-40"><img src="images/gallery/1.jpg" alt="gallery 1" onerror="this.style.opacity=.35"></div>
+        <div class="gallery-card glass overflow-hidden h-40"><img src="images/gallery/2.jpg" alt="gallery 2" onerror="this.style.opacity=.35"></div>
+        <div class="gallery-card glass overflow-hidden h-40"><img src="images/gallery/3.jpg" alt="gallery 3" onerror="this.style.opacity=.35"></div>
+        <div class="gallery-card glass overflow-hidden h-40"><img src="images/gallery/4.jpg" alt="gallery 4" onerror="this.style.opacity=.35"></div>
+        <div class="gallery-card glass overflow-hidden h-40"><img src="images/gallery/5.jpg" alt="gallery 5" onerror="this.style.opacity=.35"></div>
+        <div class="gallery-card glass overflow-hidden h-40"><img src="images/gallery/6.jpg" alt="gallery 6" onerror="this.style.opacity=.35"></div>
       </div>
-      <p class="text-center text-xs text-gray-500 mt-3">Gallery Coming Soon</p>
+      <p class="text-center text-xs text-gray-500 mt-3">Click any photo to view (gallery images will show when uploaded to /images/gallery/)</p>
     </section>
 
-    <!-- Footer -->
+    <!-- FOOTER -->
     <footer class="glass max-w-4xl w-full rounded-2xl p-4 text-center fade">
-      <p class="text-sm">Connect: 
-        <a href="mailto:mohammad.faizankhan@icloud.com" class="underline">mohammad.faizankhan@icloud.com</a> · +966 5582807659
-      </p>
-      <p class="text-xs text-gray-500 dark:text-gray-400 mt-2">© 2025 Linux-AIOS · Built by Faizan Khan</p>
+      <p class="text-sm">Connect: <a href="mailto:mohammad.faizankhan@icloud.com" class="underline">mohammad.faizankhan@icloud.com</a> · +966 5582807659</p>
+      <p class="text-xs text-gray-500 dark:text-gray-400 mt-2">© 2025 Linux-AIOS · Faizan Khan</p>
     </footer>
+
   </main>
 
+  <!-- Lightbox modal -->
+  <div id="lightbox" class="fixed inset-0 bg-black bg-opacity-70 hidden items-center justify-center z-50">
+    <div class="max-w-4xl max-h-[85vh] p-4">
+      <img id="lightboxImg" src="" alt="preview" class="w-full h-auto rounded-lg shadow-lg"/>
+    </div>
+    <button id="lightboxClose" class="absolute top-6 right-6 text-white text-2xl">✕</button>
+  </div>
+
   <script>
-    // Theme toggle
+    // Theme toggle (persist)
     const body = document.body;
     const toggle = document.getElementById('themeToggle');
     const icon = document.getElementById('themeIcon');
@@ -229,28 +395,54 @@
         body.classList.add('dark');
         icon.textContent = '☀️';
         text.textContent = 'Light';
-        localStorage.setItem('theme', 'dark');
+        localStorage.setItem('linuxAiOSTheme','dark');
       } else {
         body.classList.remove('dark');
         icon.textContent = '🌙';
         text.textContent = 'Dark';
-        localStorage.setItem('theme', 'light');
+        localStorage.setItem('linuxAiOSTheme','light');
       }
     }
-
-    const saved = localStorage.getItem('theme');
+    const saved = localStorage.getItem('linuxAiOSTheme');
     setTheme(saved === 'dark');
 
-    toggle.addEventListener('click', () => {
-      setTheme(!body.classList.contains('dark'));
-    });
+    toggle.addEventListener('click', () => setTheme(!body.classList.contains('dark')));
 
-    // Fade-in animation
+    // Fade-in on scroll
     const fades = document.querySelectorAll('.fade');
-    const io = new IntersectionObserver(entries => {
+    const io = new IntersectionObserver((entries) => {
       entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
-    }, { threshold: 0.1 });
+    }, {threshold: 0.08});
     fades.forEach(el => io.observe(el));
+
+    // Parallax banner effect on scroll
+    const banner = document.getElementById('banner');
+    const bannerImg = document.getElementById('bannerImg');
+    window.addEventListener('scroll', () => {
+      if (!banner) return;
+      const rect = banner.getBoundingClientRect();
+      // small parallax only when visible
+      const speed = 0.12; // subtle
+      const offset = Math.max(-rect.top, 0) * speed;
+      bannerImg.style.transform = `translateY(${offset}px) scale(1.05)`;
+    }, {passive:true});
+
+    // Lightbox for gallery (simple)
+    const lightbox = document.getElementById('lightbox');
+    const lightboxImg = document.getElementById('lightboxImg');
+    const lbClose = document.getElementById('lightboxClose');
+    document.querySelectorAll('.gallery-card img').forEach(img => {
+      img.addEventListener('click', (e) => {
+        if (!e.target.src) return;
+        lightboxImg.src = e.target.src;
+        lightbox.classList.remove('hidden'); lightbox.classList.add('flex');
+      });
+    });
+    lbClose.addEventListener('click', () => { lightbox.classList.add('hidden'); lightbox.classList.remove('flex'); });
+    lightbox.addEventListener('click', (e) => { if (e.target === lightbox) { lightbox.classList.add('hidden'); lightbox.classList.remove('flex'); }});
+
+    // graceful fallback: if banner image missing, hide element
+    bannerImg.addEventListener('error', () => { bannerImg.style.opacity = 0.22; bannerImg.style.filter = 'grayscale(20%)'; });
   </script>
 </body>
 </html>
