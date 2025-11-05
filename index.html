@@ -5,124 +5,107 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Faizan Khan — Linux-AIOS</title>
 
-  <!-- Tailwind (CDN) -->
+  <!-- Tailwind -->
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 
   <style>
-    /* ====== Theme & Color tokens ====== */
     :root{
       --text-dark: #1a1a1a;
       --text-secondary: #444444;
-      --glass-bg: rgba(255,255,255,0.25);       /* slightly darker than background */
+      --glass-bg: rgba(255,255,255,0.25);
       --glass-border: rgba(255,255,255,0.28);
       --glass-inner-glow: rgba(255,255,255,0.55);
-      --bg-bright: linear-gradient(180deg, #fefefe 0%, #eef8ff 30%, #e6f5ff 60%, #fefefe 100%);
+      --bg-bright: linear-gradient(180deg, #f3f7fb 0%, #e6f3fb 30%, #dceffb 60%, #eef7ff 100%);
     }
     .dark {
       --text-dark: #f3f3f3;
       --text-secondary: #c6c6c6;
-      --glass-bg: rgba(15,17,25,0.50);         /* dark glass */
+      --glass-bg: rgba(15,17,25,0.50);
       --glass-border: rgba(255,255,255,0.06);
       --glass-inner-glow: rgba(255,255,255,0.06);
     }
 
-    /* ====== Animated "cloud-like" background ====== */
+    /* darker cloud-like animated background */
     .animated-bg{
       position: fixed; inset: 0; z-index: -30;
       background: var(--bg-bright);
       background-size: 300% 300%;
-      filter: blur(18px) brightness(1.05);
-      animation: cloudFloat 30s linear infinite;
+      filter: blur(22px) brightness(.98) contrast(.98);
+      animation: cloudFloat 32s linear infinite;
     }
     @keyframes cloudFloat {
-      0% { background-position: 0% 40%; }
-      50% { background-position: 100% 60%; }
-      100% { background-position: 0% 40%; }
+      0% { background-position: 0% 30%; }
+      50% { background-position: 100% 70%; }
+      100% { background-position: 0% 30%; }
     }
 
-    /* ====== Glass panel styling (rounded, floating) ====== */
+    /* glass */
     .glass {
       background: var(--glass-bg);
       border: 1px solid var(--glass-border);
       border-radius: 14px;
-      backdrop-filter: blur(12px) saturate(130%);
-      -webkit-backdrop-filter: blur(12px) saturate(130%);
-      box-shadow: 0 10px 32px rgba(2,6,23,0.06);
+      backdrop-filter: blur(12px) saturate(120%);
+      -webkit-backdrop-filter: blur(12px) saturate(120%);
+      box-shadow: 0 12px 36px rgba(2,6,23,0.07);
       transition: transform .28s ease, box-shadow .28s ease;
       position: relative;
       overflow: hidden;
     }
-    /* subtle inner white glow for "floating" */
     .glass::before{
-      content: "";
-      position: absolute; inset: 0; pointer-events: none;
+      content:""; position:absolute; inset:0; pointer-events:none;
       background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.03));
       mix-blend-mode: overlay;
     }
-    .glass:hover { transform: translateY(-6px); box-shadow: 0 20px 48px rgba(2,6,23,0.09); }
+    .glass:hover{ transform: translateY(-6px); box-shadow: 0 24px 54px rgba(2,6,23,0.09); }
 
-    /* ====== Text colors ====== */
-    body { color: var(--text-dark); background: transparent; }
+    body { color: var(--text-dark); transition: background-color .35s, color .35s; }
     .muted { color: var(--text-secondary); }
 
-    /* ====== Breathing logo ====== */
+    /* breathing logo */
     .logo-breathe {
-      width: 110px; height: 110px; border-radius: 999px; padding:6px; display:inline-block;
-      animation: breathe 4.6s ease-in-out infinite;
-      box-shadow: 0 10px 32px rgba(59,130,246,0.08);
-      background: transparent;
-      position: relative; overflow: hidden;
+      width: 110px; height: 110px; border-radius:999px; padding:6px; overflow:hidden;
+      animation: breathe 4.6s ease-in-out infinite; box-shadow: 0 10px 38px rgba(59,130,246,0.08);
+      display:inline-block; position:relative;
     }
-    .logo-breathe img{ width:100%; height:100%; object-fit:cover; border-radius:999px; display:block;}
-    .logo-breathe .glow {
-      position:absolute; inset:-10px; border-radius:999px; pointer-events:none;
-      box-shadow: 0 0 48px rgba(99,102,241,0.08);
-      mix-blend-mode: screen;
-      transition: opacity .4s ease;
-    }
-    @keyframes breathe {
-      0% { transform: scale(1); }
-      50% { transform: scale(1.06); }
-      100% { transform: scale(1); }
+    .logo-breathe img{ width:100%; height:100%; object-fit:cover; border-radius:999px; display:block; }
+    .logo-breathe .glow{ position:absolute; inset:-8px; border-radius:999px; pointer-events:none; box-shadow: 0 0 56px rgba(99,102,241,0.08); mix-blend-mode:screen; }
+    @keyframes breathe { 0%{ transform:scale(1) } 50%{ transform:scale(1.06) } 100%{ transform:scale(1) } }
+
+    /* banner + caption */
+    .banner{ height:340px; border-radius:14px; overflow:hidden; position:relative; }
+    .banner img{ width:120%; height:120%; object-fit:cover; transform: translateY(0) scale(1.06); transition: transform .6s ease; }
+    .banner .caption{
+      position:absolute; left:24px; bottom:20px; background:linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.06));
+      padding:.6rem .9rem; border-radius:10px; backdrop-filter:blur(6px); color:var(--text-dark); font-weight:600;
+      box-shadow: 0 8px 22px rgba(2,6,23,0.06);
     }
 
-    /* ====== Banner / Parallax ====== */
-    .banner { height: 300px; border-radius: 14px; overflow: hidden; position: relative; }
-    .banner img { width: 120%; height:120%; object-fit: cover; transform: translateY(0) scale(1.05); transition: transform .6s ease; }
+    /* fade */
+    .fade{ opacity:0; transform: translateY(14px); transition: all .7s ease; }
+    .fade.visible{ opacity:1; transform: translateY(0); }
 
-    /* ====== Fade-in on scroll ====== */
-    .fade { opacity:0; transform: translateY(14px); transition: all .7s ease; }
-    .fade.visible { opacity:1; transform: translateY(0); }
+    /* Snapshot counters */
+    .stat { text-align:center; padding:1rem; border-radius:12px; }
+    .stat .num{ font-size:1.4rem; font-weight:700; }
+    .stat .label{ font-size:.8rem; color:var(--text-secondary); }
 
-    /* ====== Iframe responsive ====== */
     .iframe-wrap{ position:relative; padding-bottom:56.25%; height:0; overflow:hidden; border-radius:10px; }
     .iframe-wrap iframe{ position:absolute; top:0; left:0; width:100%; height:100%; border:0; }
 
-    /* ====== Gallery ====== */
-    .gallery-card{ border-radius:10px; overflow:hidden; background:linear-gradient(180deg,#f2f6fb,#eaf3ff); }
+    .gallery-card{ border-radius:10px; overflow:hidden; }
     .gallery-card img{ width:100%; height:100%; object-fit:cover; display:block; transition: transform .45s ease; }
-    .gallery-card:hover img{ transform: scale(1.06); }
+    .gallery-card:hover img{ transform:scale(1.06); }
 
-    /* ====== Utilities ====== */
     .glass-pad{ padding:1.25rem; }
     @media(min-width:768px){ .glass-pad{ padding:1.75rem; } }
-    .btn { display:inline-block; padding:.45rem .8rem; border-radius:8px; text-decoration:none; border:1px solid rgba(0,0,0,0.06); }
-    .small-muted{ font-size:.85rem; color:var(--text-secondary); }
-
-    /* adjust small text contrast over glass */
-    h1,h2,h3,h4 { color: var(--text-dark); }
-    p, li { color: var(--text-dark); }
-
-    /* ensure dark-mode colors */
-    .dark h1,.dark h2,.dark h3,.dark h4, .dark p, .dark li { color: var(--text-dark); }
+    .btn { display:inline-block; padding:.5rem .9rem; border-radius:9px; text-decoration:none; }
   </style>
 </head>
 <body class="antialiased">
 
-  <!-- animated background (clouds behind everything) -->
   <div class="animated-bg" aria-hidden="true"></div>
 
-  <!-- Theme toggle -->
+  <!-- theme toggle -->
   <div class="fixed top-4 right-4 z-50">
     <button id="themeToggle" class="glass px-3 py-2 rounded-lg shadow-sm flex items-center gap-2">
       <span id="themeIcon">🌙</span><span id="themeText" class="text-sm">Dark</span>
@@ -143,15 +126,7 @@
           <h1 class="text-2xl md:text-3xl font-semibold leading-tight">FAIZAN KHAN</h1>
           <p class="muted mt-1">Project & Operations Manager | Strategic Admin Leader | Workforce & Facility Expert</p>
 
-          <p class="small-muted mt-2">
-            Lucknow, India – 226003 &nbsp;|&nbsp; +966 5582807659 &nbsp;|&nbsp; <a href="mailto:mohammad.faizankhan@icloud.com" class="underline">mohammad.faizankhan@icloud.com</a>
-          </p>
-
-          <p class="small-muted mt-2">
-            LinkedIn: <a href="https://www.linkedin.com/in/faizan-khan-504084229" target="_blank" class="underline">faizan-khan-504084229</a>
-            &nbsp;·&nbsp;
-            Website: <a href="https://www.linux-aios.com" target="_blank" class="underline">linux-aios.com</a>
-          </p>
+          <p class="muted text-sm mt-2">Lucknow, India – 226003 &nbsp;|&nbsp; +966 5582807659 &nbsp;|&nbsp; <a href="mailto:mohammad.faizankhan@icloud.com" class="underline">mohammad.faizankhan@icloud.com</a></p>
 
           <div class="mt-3 flex flex-wrap gap-2">
             <a class="btn glass" href="https://www.linux-aios.com" target="_blank">Blog</a>
@@ -162,87 +137,39 @@
       </div>
     </header>
 
-    <!-- Banner (parallax) -->
+    <!-- BANNER (parallax) with small caption -->
     <section class="max-w-5xl w-full fade">
       <div class="banner glass" id="banner">
-        <!-- upload images/banner.jpg -->
-        <img id="bannerImg" src="images/banner.jpg" alt="Banner — Faizan Khan">
+        <img id="bannerImg" src="images/banner.jpg" alt="Banner">
+        <div class="caption">Building practical tools and processes that help teams deliver better results.</div>
       </div>
     </section>
 
-    <!-- MAIN WRAPPER -->
+    <!-- MAIN GRID -->
     <div class="max-w-6xl w-full grid grid-cols-1 lg:grid-cols-3 gap-6">
 
-      <!-- LEFT: MAIN CONTENT -->
+      <!-- MAIN (left) -->
       <div class="lg:col-span-2 space-y-6">
 
-        <!-- About / Founder story -->
-        <section class="glass rounded-2xl glass-pad fade" id="about">
+        <!-- About -->
+        <section class="glass rounded-2xl glass-pad fade">
           <h2 class="text-xl font-semibold mb-2">About — Founder of Linux-AIOS</h2>
-          <p class="text-sm leading-relaxed">
-            Seasoned and results-oriented Project & Operations Manager with 9+ years of progressive experience managing large-scale manpower operations, administrative systems, and client-focused service delivery in both India and Saudi Arabia. Linux-AIOS is the product of that journey — a collection of practical web tools and operational approaches designed to help teams work better and leaders make clearer decisions.
+          <p class="text-sm leading-relaxed muted">
+            Seasoned and results-oriented Project & Operations Manager with 9+ years of progressive experience managing large-scale manpower operations, administrative systems, and client-focused service delivery in India and Saudi Arabia. Linux-AIOS grew from those frontline lessons — a practical suite of lightweight web tools and operational patterns designed to reduce friction, improve visibility, and help leaders make better decisions quickly.
           </p>
         </section>
 
-        <!-- PROFESSIONAL JOURNEY -->
-        <section class="glass rounded-2xl glass-pad fade" id="journey">
-          <h2 class="text-xl font-semibold mb-3">Professional Journey — The Making of Linux-AIOS</h2>
-
-          <div class="space-y-4 text-sm">
-            <div>
-              <h3 class="font-semibold">Project Manager — Care-Pro, Saudi Arabia <span class="text-xs muted">| Oct 2023 – Present</span></h3>
-              <ul class="list-disc ml-5 mt-2">
-                <li>Overseeing 40+ concurrent projects with 1000+ employees across hospitality and healthcare sectors.</li>
-                <li>Managing cross-cultural teams from 7+ nationalities with full project lifecycle oversight.</li>
-                <li>Improved payroll and service tracking through centralized SmartSheet-based system.</li>
-                <li>Provided dispute resolution, recruitment, onboarding, training, and client support.</li>
-                <li>Strengthened client relationships through regular business visits and reporting.</li>
-              </ul>
-            </div>
-
-            <div>
-              <h3 class="font-semibold">Admin Officer — Care-Pro, Saudi Arabia <span class="text-xs muted">| Oct 2020 – Oct 2022</span></h3>
-              <ul class="list-disc ml-5 mt-2">
-                <li>Supported admin tasks across 30+ projects and over 1000 employees.</li>
-                <li>Managed HR coordination, logistics, and documentation.</li>
-                <li>Contributed to post-COVID operational continuity and remote systems setup.</li>
-              </ul>
-            </div>
-
-            <div>
-              <h3 class="font-semibold">Admin Assistant — Kawader-Pro, Saudi Arabia <span class="text-xs muted">| Feb 2019 – Oct 2020</span></h3>
-              <ul class="list-disc ml-5 mt-2">
-                <li>Handled administration of 40+ projects with 1000+ workforce.</li>
-                <li>Streamlined HR and logistical operations to ensure compliance and efficiency.</li>
-              </ul>
-            </div>
-
-            <div>
-              <h3 class="font-semibold">Computer Operator — Alwin Enterprises, Lucknow, India <span class="text-xs muted">| May 2016 – Apr 2018</span></h3>
-              <ul class="list-disc ml-5 mt-2">
-                <li>Maintained IT systems and supported digital migration of paper-based operations.</li>
-              </ul>
-            </div>
-
-            <div>
-              <h3 class="font-semibold">Computer Hardware Technician — J.P.S Enterprises, Lucknow, India <span class="text-xs muted">| Apr 2014 – Apr 2016</span></h3>
-              <ul class="list-disc ml-5 mt-2">
-                <li>Provided technical support for end-user workstations and network hardware.</li>
-              </ul>
-            </div>
-
-            <div>
-              <h3 class="font-semibold">Software Installer — Ayad Services, India <span class="text-xs muted">| Jan 2013 – Jun 2014</span></h3>
-              <ul class="list-disc ml-5 mt-2">
-                <li>Installed and maintained computer software for clients and businesses.</li>
-              </ul>
-            </div>
-          </div>
+        <!-- Professional Journey (narrative paragraph) -->
+        <section class="glass rounded-2xl glass-pad fade">
+          <h2 class="text-xl font-semibold mb-2">Professional Journey — The Making of Linux-AIOS</h2>
+          <p class="text-sm leading-relaxed" id="journeyText">
+            Progressing from technical support roles into operational leadership, the career path combined hands-on systems work with growing responsibility for people and process. Early roles focused on maintaining IT systems and deploying software, which built a foundation in troubleshooting and systems thinking. Over time this shifted into administrative and operations roles where multi-site coordination, payroll oversight and logistics became core responsibilities. In senior operations positions, responsibility expanded to managing large teams across diverse projects — improving payroll and service tracking with centralized tools, managing recruitment and onboarding processes, resolving disputes quickly, and strengthening client relationships through regular engagement. These experiences shaped the practical approach behind Linux-AIOS: simple, dependable tools built from real-world operational needs.
+          </p>
         </section>
 
-        <!-- Core Competencies -->
-        <section class="glass rounded-2xl glass-pad fade" id="competencies">
-          <h2 class="text-xl font-semibold mb-3">Core Competencies</h2>
+        <!-- Competencies -->
+        <section class="glass rounded-2xl glass-pad fade">
+          <h2 class="text-xl font-semibold mb-2">Core Competencies</h2>
           <div class="grid sm:grid-cols-2 gap-2 text-sm">
             <ul class="list-disc ml-5 space-y-1">
               <li>Workforce & Project Management</li>
@@ -250,32 +177,30 @@
               <li>Facility & Accommodation Planning</li>
               <li>Transportation Logistics</li>
               <li>Strategic Planning & Execution</li>
-              <li>Payroll & Compliance Oversight</li>
             </ul>
             <ul class="list-disc ml-5 space-y-1">
+              <li>Payroll & Compliance Oversight</li>
               <li>Talent Acquisition & Onboarding</li>
               <li>Training & Development Programs</li>
-              <li>Client Engagement & Retention</li>
               <li>KPI Monitoring & Reporting</li>
               <li>SmartSheet & Systems Integration</li>
-              <li>Conflict Resolution & Crisis Management</li>
             </ul>
           </div>
         </section>
 
         <!-- Achievements -->
-        <section class="glass rounded-2xl glass-pad fade" id="achievements">
+        <section class="glass rounded-2xl glass-pad fade">
           <h2 class="text-xl font-semibold mb-2">Notable Achievements</h2>
           <ul class="list-disc ml-5 text-sm space-y-1">
-            <li>Author of "Sand & Silence – A Migrant’s Truth Beneath the Golden Kingdom".</li>
-            <li>Digitized project tracking operations improving visibility and accountability.</li>
-            <li>Trained 300+ employees on workplace ethics and communication.</li>
+            <li>Author of “Sand & Silence — A Migrant’s Truth Beneath the Golden Kingdom”.</li>
+            <li>Digitized project tracking operations to improve visibility and accountability.</li>
+            <li>Delivered training programs for 300+ employees focused on communication and workplace ethics.</li>
           </ul>
         </section>
 
         <!-- Technical Skills -->
-        <section class="glass rounded-2xl glass-pad fade" id="skills">
-          <h2 class="text-xl font-semibold mb-3">Technical Skills</h2>
+        <section class="glass rounded-2xl glass-pad fade">
+          <h2 class="text-xl font-semibold mb-2">Technical Skills</h2>
           <div class="flex flex-wrap gap-2 mb-3">
             <span class="glass px-3 py-1 rounded-full text-sm">SmartSheet</span>
             <span class="glass px-3 py-1 rounded-full text-sm">MS Excel / Office</span>
@@ -283,37 +208,31 @@
             <span class="glass px-3 py-1 rounded-full text-sm">Linux / macOS / Windows</span>
             <span class="glass px-3 py-1 rounded-full text-sm">System Troubleshooting</span>
             <span class="glass px-3 py-1 rounded-full text-sm">Data Visualization</span>
-            <span class="glass px-3 py-1 rounded-full text-sm">Social Media Management</span>
           </div>
         </section>
 
-        <!-- Live Tools & Projects -->
-        <section class="glass rounded-2xl glass-pad fade" id="projects">
-          <h2 class="text-xl font-semibold mb-3">Live Tools & Projects</h2>
-          <div class="grid md:grid-cols-2 gap-4 text-sm">
+        <!-- Live Tools -->
+        <section class="glass rounded-2xl glass-pad fade">
+          <h2 class="text-xl font-semibold mb-2">Live Tools & Projects</h2>
+          <div class="grid md:grid-cols-2 gap-4">
             <div class="glass rounded-lg p-4">
               <h4 class="font-semibold">🗺️ Where Am I</h4>
-              <p class="muted mt-1">Real-time location & ZIP lookup tool (privacy-minded).</p>
-              <a href="https://where.am.i.linux-aios.com" target="_blank" class="small-muted underline mt-2 inline-block">Open tool</a>
+              <p class="muted mt-1">Real-time location & ZIP lookup.</p>
+              <a href="https://where.am.i.linux-aios.com" target="_blank" class="small-muted underline mt-2 inline-block">Open</a>
             </div>
-
             <div class="glass rounded-lg p-4">
               <h4 class="font-semibold">🏢 CarePro CRM (Preview)</h4>
-              <p class="muted mt-1">Responsive preview. If preview fails, open full app (new tab).</p>
-              <div class="iframe-wrap mt-2">
-                <iframe src="https://carepro-accommodation.vercel.app" title="CarePro CRM preview" sandbox="allow-scripts allow-same-origin allow-forms"></iframe>
-              </div>
+              <p class="muted mt-1">Project & accommodation CRM preview.</p>
+              <div class="iframe-wrap mt-2"><iframe src="https://carepro-accommodation.vercel.app" title="CarePro CRM preview" sandbox="allow-scripts allow-same-origin allow-forms"></iframe></div>
             </div>
-
             <div class="glass rounded-lg p-4">
               <h4 class="font-semibold">🧾 Instant CV Generator</h4>
-              <p class="muted mt-1">Create standardized CVs for teams; download ready PDFs.</p>
+              <p class="muted mt-1">Create standardized CVs for teams.</p>
               <a href="https://linux-aios.github.io/care-pro-cv-generator-by-faizan/" target="_blank" class="small-muted underline mt-2 inline-block">Launch</a>
             </div>
-
             <div class="glass rounded-lg p-4">
               <h4 class="font-semibold">🌊 FreePool</h4>
-              <p class="muted mt-1">Curated scripts, templates and open utilities.</p>
+              <p class="muted mt-1">Curated scripts and templates.</p>
               <a href="https://faizandgreate-lang.github.io/Free-pool/" target="_blank" class="small-muted underline mt-2 inline-block">Open</a>
             </div>
           </div>
@@ -321,142 +240,138 @@
 
       </div>
 
-      <!-- RIGHT: SNAPSHOT & CTAs -->
+      <!-- RIGHT: snapshot & CTAs -->
       <aside class="space-y-6">
-
         <div class="glass rounded-2xl glass-pad fade">
-          <h3 class="font-semibold">Snapshot</h3>
-          <div class="mt-3 grid grid-cols-2 gap-3 text-center">
-            <div>
-              <div class="text-2xl font-bold">40+</div>
-              <div class="text-xs muted">Projects</div>
+          <h3 class="font-semibold mb-3">Snapshot</h3>
+          <div id="snapshotGrid" class="grid grid-cols-2 gap-3">
+            <div class="stat glass-pad stat" data-target="40">
+              <div class="num" data-value="40">0</div>
+              <div class="label muted">Projects</div>
             </div>
-            <div>
-              <div class="text-2xl font-bold">1k+</div>
-              <div class="text-xs muted">Employees Managed</div>
+            <div class="stat glass-pad stat" data-target="1000">
+              <div class="num" data-value="1000">0</div>
+              <div class="label muted">Employees Managed</div>
             </div>
-            <div>
-              <div class="text-2xl font-bold">300+</div>
-              <div class="text-xs muted">Trained</div>
+            <div class="stat glass-pad stat" data-target="300">
+              <div class="num" data-value="300">0</div>
+              <div class="label muted">Trained</div>
             </div>
-            <div>
-              <div class="text-2xl font-bold">9+</div>
-              <div class="text-xs muted">Years</div>
+            <div class="stat glass-pad stat" data-target="9">
+              <div class="num" data-value="9">0</div>
+              <div class="label muted">Years</div>
             </div>
           </div>
 
           <div class="mt-4">
-            <a class="btn glass block text-center" href="mailto:mohammad.faizankhan@icloud.com">Contact</a>
-            <a class="btn glass block text-center mt-2" href="https://linux-aios.github.io/care-pro-cv-generator-by-faizan/" target="_blank">Instant CV Generator</a>
+            <a href="mailto:mohammad.faizankhan@icloud.com" class="btn glass block text-center">Contact</a>
+            <a href="https://linux-aios.github.io/care-pro-cv-generator-by-faizan/" target="_blank" class="btn glass block text-center mt-2">Instant CV Generator</a>
           </div>
         </div>
 
         <div class="glass rounded-2xl glass-pad fade">
           <h3 class="font-semibold">Quick Links</h3>
           <ul class="mt-3 text-sm space-y-1">
-            <li><a href="https://where.am.i.linux-aios.com" class="underline" target="_blank">Where Am I</a></li>
-            <li><a href="https://carepro-accommodation.vercel.app" class="underline" target="_blank">CarePro CRM</a></li>
-            <li><a href="https://faizandgreate-lang.github.io/Free-pool/" class="underline" target="_blank">FreePool</a></li>
-            <li><a href="https://www.linux-aios.com" class="underline" target="_blank">Blog</a></li>
+            <li><a href="https://where.am.i.linux-aios.com" target="_blank" class="underline">Where Am I</a></li>
+            <li><a href="https://carepro-accommodation.vercel.app" target="_blank" class="underline">CarePro CRM</a></li>
+            <li><a href="https://faizandgreate-lang.github.io/Free-pool/" target="_blank" class="underline">FreePool</a></li>
+            <li><a href="https://www.linux-aios.com" target="_blank" class="underline">Blog</a></li>
           </ul>
         </div>
-
       </aside>
     </div>
 
-    <!-- PHOTO GALLERY -->
+    <!-- Gallery -->
     <section class="glass max-w-6xl w-full rounded-2xl glass-pad fade" id="gallery">
       <h2 class="text-xl font-semibold mb-4">Photo Gallery (Coming Soon)</h2>
       <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
-        <!-- placeholders — replace with images/gallery/1.jpg .. 6.jpg -->
-        <div class="gallery-card glass h-40"><img src="images/gallery/1.jpg" alt="gallery 1" onerror="this.style.opacity=.28"></div>
-        <div class="gallery-card glass h-40"><img src="images/gallery/2.jpg" alt="gallery 2" onerror="this.style.opacity=.28"></div>
-        <div class="gallery-card glass h-40"><img src="images/gallery/3.jpg" alt="gallery 3" onerror="this.style.opacity=.28"></div>
-        <div class="gallery-card glass h-40"><img src="images/gallery/4.jpg" alt="gallery 4" onerror="this.style.opacity=.28"></div>
-        <div class="gallery-card glass h-40"><img src="images/gallery/5.jpg" alt="gallery 5" onerror="this.style.opacity=.28"></div>
-        <div class="gallery-card glass h-40"><img src="images/gallery/6.jpg" alt="gallery 6" onerror="this.style.opacity=.28"></div>
+        <div class="gallery-card"><img src="images/gallery/1.jpg" alt="g1" onerror="this.style.opacity=.28"></div>
+        <div class="gallery-card"><img src="images/gallery/2.jpg" alt="g2" onerror="this.style.opacity=.28"></div>
+        <div class="gallery-card"><img src="images/gallery/3.jpg" alt="g3" onerror="this.style.opacity=.28"></div>
+        <div class="gallery-card"><img src="images/gallery/4.jpg" alt="g4" onerror="this.style.opacity=.28"></div>
+        <div class="gallery-card"><img src="images/gallery/5.jpg" alt="g5" onerror="this.style.opacity=.28"></div>
+        <div class="gallery-card"><img src="images/gallery/6.jpg" alt="g6" onerror="this.style.opacity=.28"></div>
       </div>
-      <p class="text-center small-muted mt-3">Gallery images will appear when uploaded to <code>/images/gallery/</code></p>
+      <p class="text-center muted mt-3">Upload gallery images to <code>/images/gallery/</code></p>
     </section>
 
-    <!-- FOOTER -->
+    <!-- footer -->
     <footer class="glass max-w-4xl w-full rounded-2xl p-4 text-center fade">
-      <p class="text-sm">Connect: <a href="mailto:mohammad.faizankhan@icloud.com" class="underline">mohammad.faizankhan@icloud.com</a> · +966 5582807659</p>
-      <p class="text-xs small-muted mt-2">© 2025 Linux-AIOS · Faizan Khan</p>
+      <p class="text-sm muted">Connect: <a href="mailto:mohammad.faizankhan@icloud.com" class="underline">mohammad.faizankhan@icloud.com</a> · +966 5582807659</p>
+      <p class="text-xs muted mt-2">© 2025 Linux-AIOS · Faizan Khan</p>
     </footer>
 
   </main>
 
-  <!-- Lightbox modal -->
+  <!-- lightbox -->
   <div id="lightbox" class="fixed inset-0 bg-black bg-opacity-70 hidden items-center justify-center z-50">
-    <div class="max-w-4xl max-h-[85vh] p-4">
-      <img id="lightboxImg" src="" alt="preview" class="w-full h-auto rounded-lg shadow-lg"/>
-    </div>
+    <div class="max-w-4xl max-h-[85vh] p-4"><img id="lightboxImg" src="" alt="preview" class="w-full h-auto rounded-lg shadow-lg"/></div>
     <button id="lightboxClose" class="absolute top-6 right-6 text-white text-2xl">✕</button>
   </div>
 
   <script>
-    /* ====== Theme toggle (persisted) ====== */
-    const body = document.documentElement;
+    // theme toggle persist
+    const root = document.documentElement;
     const toggle = document.getElementById('themeToggle');
     const icon = document.getElementById('themeIcon');
     const textNode = document.getElementById('themeText');
+    function setTheme(dark){ if(dark){ root.classList.add('dark'); icon.textContent='☀️'; textNode.textContent='Light'; localStorage.setItem('linuxAiOSTheme','dark'); } else { root.classList.remove('dark'); icon.textContent='🌙'; textNode.textContent='Dark'; localStorage.setItem('linuxAiOSTheme','light'); } }
+    setTheme(localStorage.getItem('linuxAiOSTheme') === 'dark');
+    toggle.addEventListener('click', ()=> setTheme(!root.classList.contains('dark')));
 
-    function setTheme(dark){
-      if(dark){
-        body.classList.add('dark');
-        icon.textContent = '☀️';
-        textNode.textContent = 'Light';
-        localStorage.setItem('linuxAiOSTheme','dark');
-      } else {
-        body.classList.remove('dark');
-        icon.textContent = '🌙';
-        textNode.textContent = 'Dark';
-        localStorage.setItem('linuxAiOSTheme','light');
-      }
-    }
-    // initialize
-    const saved = localStorage.getItem('linuxAiOSTheme');
-    setTheme(saved === 'dark');
-
-    toggle.addEventListener('click', () => setTheme(!body.classList.contains('dark')));
-
-    /* ====== Fade-in on scroll ====== */
+    // fade-in on scroll
     const fades = document.querySelectorAll('.fade');
-    const io = new IntersectionObserver((entries) => {
-      entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); });
-    }, { threshold: 0.06 });
-    fades.forEach(el => io.observe(el));
+    const io = new IntersectionObserver((entries)=>{ entries.forEach(e=>{ if(e.isIntersecting) e.target.classList.add('visible'); }); }, {threshold:0.08});
+    fades.forEach(el=> io.observe(el));
 
-    /* ====== Parallax banner ====== */
+    // parallax banner
     const banner = document.getElementById('banner');
     const bannerImg = document.getElementById('bannerImg');
-    window.addEventListener('scroll', () => {
+    window.addEventListener('scroll', ()=> {
       if(!banner || !bannerImg) return;
       const rect = banner.getBoundingClientRect();
-      const speed = 0.12; // subtle
+      const speed = 0.12;
       const offset = Math.max(-rect.top, 0) * speed;
-      bannerImg.style.transform = `translateY(${offset}px) scale(1.05)`;
+      bannerImg.style.transform = `translateY(${offset}px) scale(1.06)`;
     }, {passive:true});
 
-    /* ====== Lightbox for gallery ====== */
+    // snapshot counter: count up once when visible
+    const stats = document.querySelectorAll('.stat');
+    let counted = false;
+    const statObserver = new IntersectionObserver((entries)=> {
+      entries.forEach(entry=>{
+        if(entry.isIntersecting && !counted){
+          counted = true;
+          stats.forEach(s=>{
+            const numEl = s.querySelector('.num');
+            const target = parseInt(numEl.getAttribute('data-value') || s.dataset.target || s.querySelector('.num').textContent);
+            let start = 0;
+            const duration = 1400;
+            const stepTime = Math.max(Math.floor(duration / target), 20);
+            const timer = setInterval(()=>{
+              start += Math.ceil(target / (duration / stepTime));
+              if(start >= target){ numEl.textContent = target + (target >= 1000 ? '+' : ''); clearInterval(timer); }
+              else numEl.textContent = start + (target >= 1000 ? '+' : '');
+            }, stepTime);
+          });
+        }
+      });
+    }, {threshold:0.2});
+    if(stats.length) statObserver.observe(document.getElementById('snapshotGrid'));
+
+    // lightbox
     const lightbox = document.getElementById('lightbox');
     const lightboxImg = document.getElementById('lightboxImg');
     const lbClose = document.getElementById('lightboxClose');
-    document.querySelectorAll('.gallery-card img').forEach(img => {
-      img.addEventListener('click', (e) => {
-        if(!e.target.src) return;
-        lightboxImg.src = e.target.src;
-        lightbox.classList.remove('hidden');
-        lightbox.classList.add('flex');
-      });
-    });
-    lbClose.addEventListener('click', () => { lightbox.classList.add('hidden'); lightbox.classList.remove('flex'); });
-    lightbox.addEventListener('click', (e) => { if(e.target === lightbox){ lightbox.classList.add('hidden'); lightbox.classList.remove('flex'); } });
+    document.querySelectorAll('.gallery-card img').forEach(img => img.addEventListener('click', (e)=>{
+      if(!e.target.src) return;
+      lightboxImg.src = e.target.src; lightbox.classList.remove('hidden'); lightbox.classList.add('flex');
+    }));
+    lbClose.addEventListener('click', ()=>{ lightbox.classList.add('hidden'); lightbox.classList.remove('flex'); });
+    lightbox.addEventListener('click', (e)=>{ if(e.target === lightbox) { lightbox.classList.add('hidden'); lightbox.classList.remove('flex'); }});
 
-    /* ====== graceful banner fallback ====== */
-    bannerImg.addEventListener('error', () => { bannerImg.style.opacity = 0.28; bannerImg.style.filter = 'grayscale(22%)'; });
-
+    // graceful banner fallback
+    if(bannerImg) bannerImg.addEventListener('error', ()=>{ bannerImg.style.opacity = .28; bannerImg.style.filter = 'grayscale(24%)'; });
   </script>
 </body>
 </html>
