@@ -3,98 +3,118 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Linux-AIOS — Faizan Khan</title>
+  <title>Faizan Khan — Linux-AIOS</title>
 
-  <!-- Tailwind CDN (works fine for GitHub Pages) -->
+  <!-- Tailwind -->
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 
   <style>
     /* Animated gradient background */
-    :root{
-      --glass-bg: rgba(255,255,255,0.18);
-      --glass-border: rgba(255,255,255,0.25);
-      --glass-dark: rgba(10,12,16,0.35);
+    :root {
+      --glass-bg: rgba(255, 255, 255, 0.2);
+      --glass-border: rgba(255, 255, 255, 0.35);
     }
-    .animated-bg{
+
+    .animated-bg {
       position: fixed;
       inset: 0;
       z-index: -10;
-      background: linear-gradient(120deg,#0f172a 0%, #0ea5e9 25%, #7c3aed 50%, #06b6d4 75%, #0f172a 100%);
+      background: linear-gradient(120deg, #e0f2fe, #bae6fd, #93c5fd, #a5b4fc, #e0f2fe);
       background-size: 400% 400%;
-      animation: gradientMove 22s ease infinite;
-      filter: saturate(1.05) blur(18px);
-    }
-    @keyframes gradientMove {
-      0%{background-position:0% 50%}
-      50%{background-position:100% 50%}
-      100%{background-position:0% 50%}
+      animation: gradientFlow 25s ease infinite;
+      filter: blur(16px) brightness(1.1);
     }
 
-    /* Glass card */
+    @keyframes gradientFlow {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    /* Glass look */
     .glass {
       background: var(--glass-bg);
       border: 1px solid var(--glass-border);
-      backdrop-filter: blur(10px) saturate(120%);
-      -webkit-backdrop-filter: blur(10px) saturate(120%);
-      box-shadow: 0 8px 30px rgba(2,6,23,0.35);
-    }
-    /* Dark theme overrides */
-    .dark .glass {
-      background: rgba(10,12,16,0.36);
-      border: 1px solid rgba(255,255,255,0.06);
-      box-shadow: 0 10px 40px rgba(2,6,23,0.6);
+      backdrop-filter: blur(12px) saturate(130%);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+      transition: all 0.3s ease;
     }
 
-    /* logo animation */
+    .glass:hover {
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.2);
+    }
+
+    .dark .glass {
+      background: rgba(15, 23, 42, 0.4);
+      border-color: rgba(255, 255, 255, 0.1);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+    }
+
+    /* Animated logo */
     .logo-anim {
-      width: 92px;
-      height: 92px;
-      border-radius: 999px;
-      display:inline-block;
-      padding:6px;
-      transition: transform 0.6s cubic-bezier(.2,.9,.3,1), box-shadow .3s;
-      animation: slowSpin 12s linear infinite;
-      box-shadow: 0 6px 20px rgba(2,6,23,0.25), 0 0 18px rgba(99,102,241,0.12);
+      width: 90px;
+      height: 90px;
+      border-radius: 50%;
+      animation: slowSpin 14s linear infinite;
+      box-shadow: 0 6px 18px rgba(59, 130, 246, 0.4);
     }
     @keyframes slowSpin {
-      0% { transform: rotate(0deg) }
-      100% { transform: rotate(360deg) }
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
     }
 
-    /* glow pulse */
-    .logo-anim::after{
-      content: "";
-      position: absolute;
-      inset: 0;
-      border-radius: 999px;
-      filter: blur(14px);
-      opacity: .38;
-      transition: opacity .4s;
+    /* Parallax banner */
+    .banner {
+      position: relative;
+      overflow: hidden;
+      border-radius: 1rem;
+      height: 260px;
+      background: rgba(255,255,255,0.12);
     }
 
-    /* fade-in scroll */
+    .banner img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transform: scale(1.08);
+      transition: transform 1s ease;
+    }
+
+    .banner:hover img {
+      transform: scale(1.1);
+    }
+
+    /* Fade scroll animation */
     .fade {
       opacity: 0;
       transform: translateY(18px);
-      transition: opacity .8s ease, transform .8s ease;
+      transition: all 0.8s ease;
     }
-    .fade.visible { opacity: 1; transform: translateY(0); }
+    .fade.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
 
-    /* responsive iframe container */
-    .iframe-wrap { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 12px; }
-    .iframe-wrap iframe { position: absolute; top:0; left:0; width:100%; height:100%; border:0; }
+    .iframe-wrap {
+      position: relative;
+      padding-bottom: 56.25%;
+      height: 0;
+      overflow: hidden;
+      border-radius: 10px;
+    }
+    .iframe-wrap iframe {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%;
+      height: 100%;
+      border: 0;
+    }
 
-    /* small utilities for glass inner padding on mobile */
-    .glass-pad { padding: 1.25rem; }
-    @media (min-width: 768px) { .glass-pad { padding: 2rem; } }
-
-    /* theme-transition for smooth color change */
-    body { transition: background-color .35s ease, color .35s ease; }
+    body { transition: background-color .4s, color .4s; }
   </style>
 </head>
-<body class="antialiased text-gray-900 bg-transparent dark:text-gray-100">
 
-  <!-- Animated background -->
+<body class="antialiased bg-transparent text-gray-900 dark:text-gray-100">
   <div class="animated-bg" aria-hidden="true"></div>
 
   <!-- Theme toggle -->
@@ -104,228 +124,133 @@
     </button>
   </div>
 
-  <!-- Page container -->
-  <main class="min-h-screen flex flex-col items-center py-12 px-4">
-    <!-- Center card -->
-    <header class="glass max-w-4xl w-full rounded-2xl glass-pad mb-8 fade" id="hero">
-      <div class="flex items-center space-x-4 md:space-x-6">
-        <!-- animated logo -->
-        <div class="relative">
-          <img src="images/logo.png" alt="Linux-AIOS logo" class="logo-anim object-cover" id="logoImg">
-        </div>
-
+  <!-- Main -->
+  <main class="min-h-screen flex flex-col items-center py-12 px-4 space-y-10">
+    <!-- Header -->
+    <header class="glass max-w-4xl w-full rounded-2xl p-6 fade" id="hero">
+      <div class="flex items-center space-x-6">
+        <img src="images/profile.jpg" alt="Faizan Khan" class="logo-anim">
         <div>
-          <h1 class="text-2xl md:text-3xl font-semibold tracking-tight">FAIZAN KHAN</h1>
-          <p class="text-sm md:text-base text-gray-700 dark:text-gray-300 mt-1">Project & Operations Manager • Founder, Linux-AIOS • Author</p>
-          <p class="text-xs md:text-sm mt-2 text-gray-600 dark:text-gray-400">
-            Lucknow, India · +966 5582807659 · <a href="mailto:mohammad.faizankhan@icloud.com" class="underline">mohammad.faizankhan@icloud.com</a>
+          <h1 class="text-3xl font-semibold tracking-tight">FAIZAN KHAN</h1>
+          <p class="text-sm md:text-base text-gray-700 dark:text-gray-300 mt-1">
+            Project & Operations Manager • Founder, Linux-AIOS • Author
+          </p>
+          <p class="text-xs mt-2 text-gray-600 dark:text-gray-400">
+            Lucknow, India · +966 5582807659 · 
+            <a href="mailto:mohammad.faizankhan@icloud.com" class="underline">mohammad.faizankhan@icloud.com</a>
           </p>
           <div class="mt-3 flex flex-wrap gap-2">
-            <a class="text-sm px-3 py-1 rounded-md glass" href="https://www.linux-aios.com" target="_blank">Blog</a>
-            <a class="text-sm px-3 py-1 rounded-md glass" href="https://www.linkedin.com/in/faizan-khan-504084229" target="_blank">LinkedIn</a>
-            <a class="text-sm px-3 py-1 rounded-md glass" href="https://faizandgreate-lang.github.io/Free-pool/" target="_blank">FreePool</a>
+            <a href="https://www.linux-aios.com" target="_blank" class="glass px-3 py-1 rounded-md text-sm">Blog</a>
+            <a href="https://www.linkedin.com/in/faizan-khan-504084229" target="_blank" class="glass px-3 py-1 rounded-md text-sm">LinkedIn</a>
+            <a href="https://faizandgreate-lang.github.io/Free-pool/" target="_blank" class="glass px-3 py-1 rounded-md text-sm">FreePool</a>
           </div>
         </div>
       </div>
     </header>
 
-    <!-- Two column layout: Left: About & Tools, Right: Quick stats / mini-cards -->
-    <div class="max-w-6xl w-full grid grid-cols-1 lg:grid-cols-3 gap-6">
+    <!-- Parallax Banner -->
+    <section class="max-w-5xl w-full banner glass fade">
+      <img src="images/banner-placeholder.jpg" alt="Faizan Khan Banner">
+    </section>
 
-      <!-- MAIN COLUMN -->
-      <section class="lg:col-span-2 space-y-6">
+    <!-- About -->
+    <section class="glass max-w-5xl w-full rounded-2xl p-6 fade">
+      <h2 class="text-2xl font-semibold mb-3">About Me</h2>
+      <p class="text-sm text-gray-800 dark:text-gray-200 leading-relaxed">
+        I’m a Project & Operations Manager with 9+ years of experience driving performance across large-scale operations in India and Saudi Arabia. 
+        Passionate about building efficient systems, training motivated teams, and creating digital tools that simplify work and amplify results.
+      </p>
+    </section>
 
-        <!-- About (expanded from CV) -->
-        <article class="glass rounded-2xl glass-pad fade" id="about">
-          <h2 class="text-xl font-semibold mb-2">About & Professional Summary</h2>
-          <p class="text-sm leading-relaxed text-gray-800 dark:text-gray-200 mb-3">
-            Faizan Khan is a seasoned Project & Operations Manager with 9+ years of progressive experience across India and Saudi Arabia.
-            He has led large-scale manpower operations, facility services and multi-site projects — consistently delivering operational improvements,
-            workforce stability, and client satisfaction. Faizan combines technical foundations (IT systems, hardware, troubleshooting) with advanced
-            administrative leadership to design scalable processes and build resilient teams.
-          </p>
+    <!-- Tools & Projects -->
+    <section class="glass max-w-5xl w-full rounded-2xl p-6 fade">
+      <h2 class="text-2xl font-semibold mb-3">Live Tools & Projects</h2>
+      <div class="grid md:grid-cols-2 gap-4">
+        <div class="glass p-4 rounded-lg">
+          <h3 class="font-semibold">🗺️ Where Am I</h3>
+          <p class="text-sm">Real-time location & zip code finder.</p>
+          <a href="https://where.am.i.linux-aios.com" target="_blank" class="underline text-sm mt-2 inline-block">Open Tool</a>
+        </div>
 
-          <h3 class="font-medium mt-4">Core Responsibilities (recent roles)</h3>
-          <ul class="list-disc ml-5 mt-2 text-sm leading-relaxed text-gray-700 dark:text-gray-300">
-            <li>Overseeing 40+ simultaneous projects and operations for 1000+ employees (hospitality, healthcare, and corporate clients).</li>
-            <li>Full-cycle recruitment, onboarding, payroll coordination, and settlement handling across multiple jurisdictions.</li>
-            <li>Transport & accommodation planning, vendor management and compliance monitoring.</li>
-            <li>Training design and delivery — upskilling workforce in communication, safety and SOP adherence (300+ trained).</li>
-            <li>Introduced SmartSheet-based centralized tracking for payroll and project KPIs, improving visibility & accountability.</li>
-          </ul>
-
-          <h3 class="font-medium mt-4">Leadership Philosophy</h3>
-          <p class="text-sm leading-relaxed text-gray-700 dark:text-gray-300">
-            Efficiency is driven by people who understand purpose. Faizan’s approach centers on clear communication, respectful accountability, and
-            incremental process improvements. He champions sustainable operations that consider both business outcomes and team welfare.
-          </p>
-        </article>
-
-        <!-- Tools & interactive mini-CRM preview -->
-        <article class="glass rounded-2xl glass-pad fade" id="tools">
-          <h2 class="text-xl font-semibold mb-3">Tools & Live Demos</h2>
-
-          <div class="grid md:grid-cols-2 gap-4">
-            <!-- Where Am I -->
-            <div class="glass rounded-lg p-4">
-              <h4 class="font-semibold">🗺️ Where Am I</h4>
-              <p class="text-sm text-gray-700 dark:text-gray-300 mt-1">Real-time location and postal code lookup tool — lightweight, privacy-minded, mobile-ready.</p>
-              <a class="inline-block mt-3 text-sm underline" href="https://where.am.i.linux-aios.com" target="_blank">Open tool</a>
-            </div>
-
-            <!-- CarePro CRM (iframe preview) -->
-            <div class="glass rounded-lg p-4">
-              <h4 class="font-semibold">🏢 CarePro CRM — Mini Preview</h4>
-              <p class="text-sm text-gray-700 dark:text-gray-300 mt-1">Responsive preview of your CRM. Click View to open full app in new tab.</p>
-              <div class="mt-3">
-                <div class="iframe-wrap glass" style="padding:8px;">
-                  <!-- iframe preview: uses your Vercel URL -->
-                  <iframe src="https://carepro-accommodation.vercel.app" title="CarePro CRM preview" sandbox="allow-scripts allow-same-origin allow-forms"></iframe>
-                </div>
-                <div class="mt-2 flex gap-2">
-                  <a class="text-sm px-3 py-1 rounded-md glass" href="https://carepro-accommodation.vercel.app" target="_blank">Open Full CRM</a>
-                </div>
-              </div>
-            </div>
-
-            <!-- CV generator -->
-            <div class="glass rounded-lg p-4">
-              <h4 class="font-semibold">🧾 Instant CV Generator</h4>
-              <p class="text-sm text-gray-700 dark:text-gray-300 mt-1">Generate standardized workforce CVs instantly — prefilled templates & downloadable result.</p>
-              <a class="inline-block mt-3 text-sm underline" href="https://linux-aios.github.io/care-pro-cv-generator-by-faizan/" target="_blank">Launch CV Generator</a>
-            </div>
-
-            <!-- FreePool link (no embed) -->
-            <div class="glass rounded-lg p-4">
-              <h4 class="font-semibold">🌊 FreePool (Resources)</h4>
-              <p class="text-sm text-gray-700 dark:text-gray-300 mt-1">Collection of scripts, templates and small utilities curated by Faizan.</p>
-              <a class="inline-block mt-3 text-sm underline" href="https://faizandgreate-lang.github.io/Free-pool/" target="_blank">Open FreePool</a>
-            </div>
-
-            <!-- Blog card -->
-            <div class="glass rounded-lg p-4 md:col-span-2">
-              <h4 class="font-semibold">✍️ Articles & Book</h4>
-              <p class="text-sm text-gray-700 dark:text-gray-300 mt-1">Read founder notes, technical posts and the book <em>Sand & Silence</em> on the blog.</p>
-              <div class="mt-3 flex gap-2">
-                <a class="glass px-3 py-1 rounded-md" href="https://www.linux-aios.com" target="_blank">Visit Blog</a>
-                <a class="glass px-3 py-1 rounded-md" href="#" target="_blank">Book / Downloads</a>
-              </div>
-            </div>
-          </div>
-        </article>
-
-        <!-- Achievements & Metrics (enriched content) -->
-        <article class="glass rounded-2xl glass-pad fade" id="achievements">
-          <h2 class="text-xl font-semibold mb-3">Achievements & Impact</h2>
-          <ul class="list-disc ml-5 space-y-2 text-sm text-gray-700 dark:text-gray-300">
-            <li>Managed 40+ projects and 1,000+ employees across Saudi Arabia (hospitality & healthcare verticals).</li>
-            <li>Designed SmartSheet-based workflows to consolidate payroll and project KPIs — improved reporting time by ~40%.</li>
-            <li>Built an internal recruitment pipeline reducing external hiring costs by ~30%.</li>
-            <li>Delivered training programs to 300+ employees on workplace ethics and communication, improving retention metrics.</li>
-            <li>Launched sustainability initiatives (tree-planting drives) tied to CSR objectives.</li>
-            <li>Author of <strong>Sand & Silence — A Migrant’s Truth Beneath the Golden Kingdom</strong>.</li>
-          </ul>
-        </article>
-
-      </section>
-
-      <!-- RIGHT / QUICK INFO COLUMN -->
-      <aside class="space-y-6">
-        <!-- Quick stats card -->
-        <div class="glass rounded-2xl glass-pad fade">
-          <h3 class="font-semibold text-lg">Snapshot</h3>
-          <div class="mt-3 grid grid-cols-2 gap-3">
-            <div class="text-center">
-              <div class="text-2xl font-bold">40+</div>
-              <div class="text-xs text-gray-600 dark:text-gray-300">Projects</div>
-            </div>
-            <div class="text-center">
-              <div class="text-2xl font-bold">1k+</div>
-              <div class="text-xs text-gray-600 dark:text-gray-300">Employees Managed</div>
-            </div>
-            <div class="text-center">
-              <div class="text-2xl font-bold">300+</div>
-              <div class="text-xs text-gray-600 dark:text-gray-300">Trained</div>
-            </div>
-            <div class="text-center">
-              <div class="text-2xl font-bold">9+</div>
-              <div class="text-xs text-gray-600 dark:text-gray-300">Years Experience</div>
-            </div>
+        <div class="glass p-4 rounded-lg">
+          <h3 class="font-semibold">🏢 Mini CRM</h3>
+          <p class="text-sm">Preview of CarePro CRM.</p>
+          <div class="iframe-wrap mt-2">
+            <iframe src="https://carepro-accommodation.vercel.app"></iframe>
           </div>
         </div>
 
-        <!-- Technical Competence -->
-        <div class="glass rounded-2xl glass-pad fade">
-          <h3 class="font-semibold">Technical Competence</h3>
-          <ul class="mt-3 text-sm text-gray-700 dark:text-gray-300 space-y-1">
-            <li>SmartSheet, Project Tracking & KPI Dashboards</li>
-            <li>MS Office, Excel (advanced), Google Workspace</li>
-            <li>ERP systems (implementation support)</li>
-            <li>Linux / macOS / Windows administration</li>
-            <li>System troubleshooting & software deployment</li>
-            <li>Data visualization, reporting & basic scripting</li>
-            <li>Social media & basic digital marketing</li>
-          </ul>
+        <div class="glass p-4 rounded-lg">
+          <h3 class="font-semibold">🧾 CV Generator</h3>
+          <p class="text-sm">Instant CV builder for workforce profiles.</p>
+          <a href="https://linux-aios.github.io/care-pro-cv-generator-by-faizan/" target="_blank" class="underline text-sm mt-2 inline-block">Launch</a>
         </div>
 
-        <!-- Languages & Misc -->
-        <div class="glass rounded-2xl glass-pad fade">
-          <h3 class="font-semibold">Languages</h3>
-          <p class="text-sm mt-2 text-gray-700 dark:text-gray-300">English (C1), Hindi (C2), Urdu (C1), Arabic (A1)</p>
-
-          <h3 class="font-semibold mt-4">Licenses</h3>
-          <p class="text-sm text-gray-700 dark:text-gray-300">Private Driving License – Saudi Arabia</p>
+        <div class="glass p-4 rounded-lg">
+          <h3 class="font-semibold">🌊 FreePool</h3>
+          <p class="text-sm">Curated open resources and scripts.</p>
+          <a href="https://faizandgreate-lang.github.io/Free-pool/" target="_blank" class="underline text-sm mt-2 inline-block">Open</a>
         </div>
-      </aside>
-    </div>
+      </div>
+    </section>
 
-    <!-- contact / footer -->
-    <footer class="max-w-4xl w-full mt-10 glass rounded-2xl glass-pad text-sm text-center fade">
-      <p class="text-sm">Connect: <a href="mailto:mohammad.faizankhan@icloud.com" class="underline">mohammad.faizankhan@icloud.com</a> · +966 5582807659</p>
-      <p class="text-xs text-gray-600 dark:text-gray-400 mt-2">© 2025 Linux-AIOS · Built & maintained by Faizan Khan</p>
+    <!-- Photo Gallery -->
+    <section class="glass max-w-5xl w-full rounded-2xl p-6 fade">
+      <h2 class="text-2xl font-semibold mb-3">Photo Gallery</h2>
+      <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+        <div class="rounded-lg overflow-hidden bg-gray-300 animate-pulse h-40"></div>
+        <div class="rounded-lg overflow-hidden bg-gray-300 animate-pulse h-40"></div>
+        <div class="rounded-lg overflow-hidden bg-gray-300 animate-pulse h-40"></div>
+        <div class="rounded-lg overflow-hidden bg-gray-300 animate-pulse h-40"></div>
+        <div class="rounded-lg overflow-hidden bg-gray-300 animate-pulse h-40"></div>
+        <div class="rounded-lg overflow-hidden bg-gray-300 animate-pulse h-40"></div>
+      </div>
+      <p class="text-center text-xs text-gray-500 mt-3">Gallery Coming Soon</p>
+    </section>
+
+    <!-- Footer -->
+    <footer class="glass max-w-4xl w-full rounded-2xl p-4 text-center fade">
+      <p class="text-sm">Connect: 
+        <a href="mailto:mohammad.faizankhan@icloud.com" class="underline">mohammad.faizankhan@icloud.com</a> · +966 5582807659
+      </p>
+      <p class="text-xs text-gray-500 dark:text-gray-400 mt-2">© 2025 Linux-AIOS · Built by Faizan Khan</p>
     </footer>
   </main>
 
-  <!-- Scripts: theme, scroll animations (persisted theme) -->
   <script>
-    // Theme handling with localStorage
-    const root = document.documentElement;
+    // Theme toggle
     const body = document.body;
-    const btn = document.getElementById('themeToggle');
+    const toggle = document.getElementById('themeToggle');
     const icon = document.getElementById('themeIcon');
-    const ttext = document.getElementById('themeText');
+    const text = document.getElementById('themeText');
 
-    function setTheme(isDark){
-      if(isDark){
+    function setTheme(dark) {
+      if (dark) {
         body.classList.add('dark');
         icon.textContent = '☀️';
-        ttext.textContent = 'Light';
-        localStorage.setItem('linuxAiOSTheme','dark');
+        text.textContent = 'Light';
+        localStorage.setItem('theme', 'dark');
       } else {
         body.classList.remove('dark');
         icon.textContent = '🌙';
-        ttext.textContent = 'Dark';
-        localStorage.setItem('linuxAiOSTheme','light');
+        text.textContent = 'Dark';
+        localStorage.setItem('theme', 'light');
       }
     }
-    // initialize
-    const saved = localStorage.getItem('linuxAiOSTheme');
-    if(saved === 'dark') setTheme(true);
-    else setTheme(false);
 
-    btn.addEventListener('click', () => {
+    const saved = localStorage.getItem('theme');
+    setTheme(saved === 'dark');
+
+    toggle.addEventListener('click', () => {
       setTheme(!body.classList.contains('dark'));
     });
 
-    // Fade-in on scroll using IntersectionObserver
+    // Fade-in animation
     const fades = document.querySelectorAll('.fade');
-    const io = new IntersectionObserver((entries) => {
-      entries.forEach(ent => {
-        if(ent.isIntersecting) ent.target.classList.add('visible');
-      });
-    }, {threshold: 0.12});
+    const io = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+    }, { threshold: 0.1 });
     fades.forEach(el => io.observe(el));
   </script>
-
 </body>
 </html>
